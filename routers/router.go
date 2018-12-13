@@ -8,13 +8,13 @@
 package routers
 
 import (
-	"blog-api/controllers"
+	"vveq-api/controllers"
 
 	"github.com/astaxie/beego"
 )
 
 func init() {
-	ns := beego.NewNamespace("/v1",
+	ns := beego.NewNamespace("/api",
 		beego.NSNamespace("/object",
 			beego.NSInclude(
 				&controllers.ObjectController{},
@@ -23,6 +23,12 @@ func init() {
 		beego.NSNamespace("/user",
 			beego.NSInclude(
 				&controllers.UserController{},
+			),
+		),
+		// 验证码
+		beego.NSNamespace("/verify",
+			beego.NSInclude(
+				&controllers.VerifyController{},
 			),
 		),
 	)

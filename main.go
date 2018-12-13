@@ -1,7 +1,7 @@
 package main
 
 import (
-	_ "blog-api/routers"
+	_ "vveq-api/routers"
 
 	"github.com/astaxie/beego"
 )
