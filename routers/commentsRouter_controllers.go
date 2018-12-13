@@ -117,9 +117,9 @@ func init() {
 
 	beego.GlobalControllerRouter["vveq-api/controllers:VerifyController"] = append(beego.GlobalControllerRouter["vveq-api/controllers:VerifyController"],
 		beego.ControllerComments{
-			Method:           "Get",
-			Router:           `/:objectId`,
-			AllowHTTPMethods: []string{"get"},
+			Method:           "Post",
+			Router:           `/`,
+			AllowHTTPMethods: []string{"post"},
 			MethodParams:     param.Make(),
 			Filters:          nil,
 			Params:           nil})
