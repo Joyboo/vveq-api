@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"vveq-api/models"
 
 	"github.com/astaxie/beego"
@@ -12,6 +13,8 @@ type UserController struct {
 	beego.Controller
 }
 
+type returnType map[string]interface{}
+
 // @Title CreateUser
 // @Description create users
 // @Param	body		body 	models.User	true		"body for user content"
@@ -21,8 +24,10 @@ type UserController struct {
 func (u *UserController) Post() {
 	var user models.User
 	json.Unmarshal(u.Ctx.Input.RequestBody, &user)
-	uid := models.AddUser(user)
-	u.Data["json"] = map[string]string{"uid": uid}
+	fmt.Println(user)
+	//uid := models.AddUser(user)
+	uid := 123
+	u.Data["json"] = map[string]int{"uid": uid}
 	u.ServeJSON()
 }
 
@@ -43,13 +48,21 @@ func (u *UserController) GetAll() {
 // @Failure 403 :uid is empty
 // @router /:uid [get]
 func (u *UserController) Get() {
+	// todo 权限鉴定
 	uid := u.GetString(":uid")
 	if uid != "" {
 		user, err := models.GetUser(uid)
 		if err != nil {
-			u.Data["json"] = err.Error()
+			u.Data["json"] = returnType{
+				"status":  0,
+				"message": err.Error(),
+			}
 		} else {
-			u.Data["json"] = user
+			u.Data["json"] = returnType{
+				"status":  1,
+				"message": "success",
+				"data":    user,
+			}
 		}
 	}
 	u.ServeJSON()
@@ -63,8 +76,8 @@ func (u *UserController) Get() {
 // @Failure 403 :uid is not int
 // @router /:uid [put]
 func (u *UserController) Put() {
-	uid := u.GetString(":uid")
-	if uid != "" {
+	uid, err := u.GetInt(":uid")
+	if uid != 0 && err != nil {
 		var user models.User
 		json.Unmarshal(u.Ctx.Input.RequestBody, &user)
 		uu, err := models.UpdateUser(uid, &user)
@@ -84,7 +97,11 @@ func (u *UserController) Put() {
 // @Failure 403 uid is empty
 // @router /:uid [delete]
 func (u *UserController) Delete() {
-	uid := u.GetString(":uid")
+	uid, err := u.GetInt(":uid")
+	if err != nil {
+		u.Data["json"] = "delete error!"
+		u.ServeJSON()
+	}
 	models.DeleteUser(uid)
 	u.Data["json"] = "delete success!"
 	u.ServeJSON()
@@ -114,5 +131,22 @@ func (u *UserController) Login() {
 // @router /logout [get]
 func (u *UserController) Logout() {
 	u.Data["json"] = "logout success"
+	u.ServeJSON()
+}
+
+// @Title UsernameIsExists
+// @Description 用户名是否存在
+// @Success 200 {string} logout success
+// @router /usernameIsExists/:username [get]
+func (u *UserController) UsernameIsExists() {
+	username := u.GetString(":username")
+	if username != "" {
+		_, err := models.GetUser(username)
+		if err != nil {
+			u.Data["json"] = returnType{"status": 0}
+		} else {
+			u.Data["json"] = returnType{"status": 1}
+		}
+	}
 	u.ServeJSON()
 }
