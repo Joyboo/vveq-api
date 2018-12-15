@@ -1,50 +1,42 @@
-package user
+package models
 
 import (
-	"errors"
+	"github.com/astaxie/beego/orm"
+	"time"
 )
-
-var (
-	UserList map[int]*User
-)
-
-func init() {
-	UserList = make(map[int]*User)
-	UserList[1] = &User{1, "user_11111", "astaxie", "11111"}
-}
 
 type User struct {
 	Id       int
-	Username string
+	Username string `orm:"unique"`
+	Nickname string
 	Password string
-	//Profile  Profile
-	Email string
+	Email    string
+	Tel      string
+	Avatar   string
+	Instime  int64
 }
 
-type Profile struct {
-	Gender  string
-	Age     int
-	Address string
-	Email   string
+func NewUser() *User {
+	return &User{}
 }
 
-func AddUser(u User) int {
-	u.Id = 1
-	UserList[u.Id] = &u
-	return u.Id
+// 用户名是否存在
+// @param username string
+// @return int46
+// @return error
+func (u *User) GetUserByName(username string) (int64, error) {
+	return orm.NewOrm().QueryTable("user").Filter("username", username).Count()
 }
 
-func GetUser(username string) (u *User, err error) {
-	for _, v := range UserList {
-		if v.Username == username {
-			return v, nil
-		}
-	}
-	return nil, errors.New("User not exists")
+func (u *User) AddUser() (int64, error) {
+	u.Instime = time.Now().Unix()
+	u.Password = Md5(u.Password)
+	return orm.NewOrm().Insert(u)
 }
 
+/*
 func GetAllUsers() map[int]*User {
-	return UserList
+	return [0]User{}
 }
 
 func UpdateUser(uid int, uu *User) (a *User, err error) {
@@ -55,7 +47,7 @@ func UpdateUser(uid int, uu *User) (a *User, err error) {
 		if uu.Password != "" {
 			u.Password = uu.Password
 		}
-		/*if uu.Profile.Age != 0 {
+		if uu.Profile.Age != 0 {
 			u.Profile.Age = uu.Profile.Age
 		}
 		if uu.Profile.Address != "" {
@@ -66,7 +58,7 @@ func UpdateUser(uid int, uu *User) (a *User, err error) {
 		}
 		if uu.Profile.Email != "" {
 			u.Profile.Email = uu.Profile.Email
-		}*/
+		}
 		return u, nil
 	}
 	return nil, errors.New("User Not Exist")
@@ -84,3 +76,4 @@ func Login(username, password string) bool {
 func DeleteUser(uid int) {
 	delete(UserList, uid)
 }
+*/

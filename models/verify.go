@@ -1,4 +1,4 @@
-package verify
+package models
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 )
 
 // 请求struct
-type ConfigJsonBody struct {
+type ConfigVerifyBody struct {
 	Id              string
 	CaptchaType     string
 	VerifyValue     string
@@ -15,7 +15,16 @@ type ConfigJsonBody struct {
 	ConfigDigit     base64Captcha.ConfigDigit
 }
 
-func demoCodeCaptchaCreate() {
+func NewConfigVerifyBody() *ConfigVerifyBody {
+	return &ConfigVerifyBody{}
+}
+
+// 验证码校验
+func (c *ConfigVerifyBody) Compare() bool {
+	return base64Captcha.VerifyCaptcha(c.Id, c.VerifyValue)
+}
+
+func (c *ConfigVerifyBody) demoCodeCaptchaCreate() {
 	//config struct for digits
 	//数字验证码配置
 	var configD = base64Captcha.ConfigDigit{

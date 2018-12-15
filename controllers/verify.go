@@ -5,7 +5,7 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/mojocn/base64Captcha"
 	"log"
-	"vveq-api/models/verify"
+	"vveq-api/models"
 )
 
 // Operations about verify
@@ -15,20 +15,18 @@ type VerifyController struct {
 
 // @Title GetCaptcha
 // @Description 获取验证码
-// @Param	postParameters verify.ConfigJsonBody		"verify.ConfigJsonBody"
-// @Success 200 {object} verify.ConfigJsonBody
+// @Param	postParameters models.ConfigVerifyBody		"models.ConfigVerifyBody"
+// @Success 200 {object} models.ConfigVerifyBody
 // @Failure 403 param is empty
 // @router /getCaptcha [post]
 func (o *VerifyController) GetCaptcha() {
 	//接收客户端发送来的请求参数
-	var postParameters verify.ConfigJsonBody
+	var postParameters models.ConfigVerifyBody
 	if err := json.Unmarshal(o.Ctx.Input.RequestBody, &postParameters); err != nil {
 		log.Println(err)
-		o.Data["json"] = map[string]interface{}{
-			"status":  0,
-			"message": "param error",
-		}
+		o.Data["json"] = map[string]int{"status": 0}
 		o.ServeJSON()
+		return
 	}
 
 	//创建base64图像验证码
@@ -61,34 +59,26 @@ func (o *VerifyController) GetCaptcha() {
 
 // @Title VerifyCaptcha
 // @Description 验证码校验
-// @Param	postParameters verify.ConfigJsonBody		"verify.ConfigJsonBody"
-// @Success 200 {object} verify.ConfigJsonBody
+// @Param	postParameters models.ConfigVerifyBody		"models.ConfigVerifyBody"
+// @Success 200 {object} models.ConfigVerifyBody
 // @Failure 403 param is empty
 // @router /verifyCaptcha [post]
 func (o *VerifyController) VerifyCaptcha() {
 	//接收客户端发送来的请求参数
-	var postParameters verify.ConfigJsonBody
+	var postParameters models.ConfigVerifyBody
 	if err := json.Unmarshal(o.Ctx.Input.RequestBody, &postParameters); err != nil {
 		log.Println(err)
-		o.Data["json"] = map[string]interface{}{
-			"status":  0,
-			"message": "参数有误",
-		}
+		o.Data["json"] = map[string]int{"status": 0}
 		o.ServeJSON()
+		return
 	}
 	//比较图像验证码
-	verifyResult := base64Captcha.VerifyCaptcha(postParameters.Id, postParameters.VerifyValue)
+	verifyResult := postParameters.Compare()
 
 	if verifyResult {
-		o.Data["json"] = map[string]interface{}{
-			"status":  1,
-			"message": "验证通过",
-		}
+		o.Data["json"] = map[string]int{"status": 1}
 	} else {
-		o.Data["json"] = map[string]interface{}{
-			"status":  0,
-			"message": "验证失败",
-		}
+		o.Data["json"] = map[string]int{"status": 0}
 	}
 	o.ServeJSON()
 }

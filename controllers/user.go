@@ -2,8 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
-	"vveq-api/models/user"
+	"vveq-api/models"
 
 	"github.com/astaxie/beego"
 )
@@ -13,52 +12,72 @@ type UserController struct {
 	beego.Controller
 }
 
-type returnType map[string]interface{}
+type postPar struct {
+	From   models.User
+	Verify models.ConfigVerifyBody
+}
 
 // @Title CreateUser
 // @Description create users
-// @Param	body		body 	user.User	true		"body for user content"
-// @Success 200 {int} user.User.Id
+// @Param	body		body 	models.User	true		"body for user content"
+// @Success 200 {int} model.User.Id
 // @Failure 403 body is empty
 // @router / [post]
 func (u *UserController) Post() {
-	var user user.User
-	json.Unmarshal(u.Ctx.Input.RequestBody, &user)
-	fmt.Println(user)
-	//uid := user.AddUser(user)
-	uid := 123
-	u.Data["json"] = map[string]int{"uid": uid}
+	var postParams postPar
+	err := json.Unmarshal(u.Ctx.Input.RequestBody, &postParams)
+	if err != nil {
+		u.Data["json"] = map[string]int{"status": 0}
+		u.ServeJSON()
+		return
+	}
+	// 验证码校验
+	if verifyResult := postParams.Verify.Compare(); !verifyResult {
+		u.Data["json"] = map[string]int{"status": -1}
+		u.ServeJSON()
+		return
+	}
+	uid, err := postParams.From.AddUser()
+	if err != nil {
+		beego.Error("注册用户失败: ", err)
+		u.Data["json"] = map[string]int{"status": 0}
+	} else {
+		u.Data["json"] = map[string]interface{}{
+			"status": 1,
+			"data":   uid,
+		}
+	}
 	u.ServeJSON()
 }
 
 // @Title GetAll
 // @Description get all Users
-// @Success 200 {object} user.User
+// @Success 200 {object} models.User
 // @router / [get]
-func (u *UserController) GetAll() {
+/*func (u *UserController) GetAll() {
 	users := user.GetAllUsers()
 	u.Data["json"] = users
 	u.ServeJSON()
-}
+}*/
 
 // @Title Get
 // @Description get user by uid
 // @Param	uid		path 	string	true		"The key for staticblock"
-// @Success 200 {object} user.User
+// @Success 200 {object} models.User
 // @Failure 403 :uid is empty
 // @router /:uid [get]
-func (u *UserController) Get() {
+/*func (u *UserController) Get() {
 	// todo 权限鉴定
 	uid := u.GetString(":uid")
 	if uid != "" {
 		user, err := user.GetUser(uid)
 		if err != nil {
-			u.Data["json"] = returnType{
+			u.Data["json"] = map[string]interface{}{
 				"status":  0,
 				"message": err.Error(),
 			}
 		} else {
-			u.Data["json"] = returnType{
+			u.Data["json"] = map[string]interface{}{
 				"status":  1,
 				"message": "success",
 				"data":    user,
@@ -66,7 +85,7 @@ func (u *UserController) Get() {
 		}
 	}
 	u.ServeJSON()
-}
+}*/
 
 // @Title Update
 // @Description update the user
@@ -75,7 +94,7 @@ func (u *UserController) Get() {
 // @Success 200 {object} user.User
 // @Failure 403 :uid is not int
 // @router /:uid [put]
-func (u *UserController) Put() {
+/*func (u *UserController) Put() {
 	uid, err := u.GetInt(":uid")
 	if uid != 0 && err != nil {
 		var userData user.User
@@ -88,7 +107,7 @@ func (u *UserController) Put() {
 		}
 	}
 	u.ServeJSON()
-}
+}*/
 
 // @Title Delete
 // @Description delete the user
@@ -96,7 +115,7 @@ func (u *UserController) Put() {
 // @Success 200 {string} delete success!
 // @Failure 403 uid is empty
 // @router /:uid [delete]
-func (u *UserController) Delete() {
+/*func (u *UserController) Delete() {
 	uid, err := u.GetInt(":uid")
 	if err != nil {
 		u.Data["json"] = "delete error!"
@@ -105,7 +124,7 @@ func (u *UserController) Delete() {
 	user.DeleteUser(uid)
 	u.Data["json"] = "delete success!"
 	u.ServeJSON()
-}
+}*/
 
 // @Title Login
 // @Description Logs user into the system
@@ -114,7 +133,7 @@ func (u *UserController) Delete() {
 // @Success 200 {string} login success
 // @Failure 403 user not exist
 // @router /login [get]
-func (u *UserController) Login() {
+/*func (u *UserController) Login() {
 	username := u.GetString("username")
 	password := u.GetString("password")
 	if user.Login(username, password) {
@@ -123,16 +142,16 @@ func (u *UserController) Login() {
 		u.Data["json"] = "user not exist"
 	}
 	u.ServeJSON()
-}
+}*/
 
 // @Title logout
 // @Description Logs out current logged in user session
 // @Success 200 {string} logout success
 // @router /logout [get]
-func (u *UserController) Logout() {
+/*func (u *UserController) Logout() {
 	u.Data["json"] = "logout success"
 	u.ServeJSON()
-}
+}*/
 
 // @Title UsernameIsExists
 // @Description 用户名是否存在
@@ -141,11 +160,11 @@ func (u *UserController) Logout() {
 func (u *UserController) UsernameIsExists() {
 	username := u.GetString(":username")
 	if username != "" {
-		_, err := user.GetUser(username)
-		if err != nil {
-			u.Data["json"] = returnType{"status": 0}
+		num, err := models.NewUser().GetUserByName(username)
+		if err == nil && num <= 0 {
+			u.Data["json"] = map[string]int{"status": 1}
 		} else {
-			u.Data["json"] = returnType{"status": 1}
+			u.Data["json"] = map[string]int{"status": 0}
 		}
 	}
 	u.ServeJSON()
