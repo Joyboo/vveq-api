@@ -113,8 +113,16 @@ func init() {
 
 	beego.GlobalControllerRouter["vveq-api/controllers:VerifyController"] = append(beego.GlobalControllerRouter["vveq-api/controllers:VerifyController"],
 		beego.ControllerComments{
-			Method:           "Post",
-			Router:           `/`,
+			Method:           "GetCaptcha",
+			Router:           `/getCaptcha`,
+			AllowHTTPMethods: []string{"post"},
+			MethodParams:     param.Make(),
+			Params:           nil})
+
+	beego.GlobalControllerRouter["vveq-api/controllers:VerifyController"] = append(beego.GlobalControllerRouter["vveq-api/controllers:VerifyController"],
+		beego.ControllerComments{
+			Method:           "VerifyCaptcha",
+			Router:           `/verifyCaptcha`,
 			AllowHTTPMethods: []string{"post"},
 			MethodParams:     param.Make(),
 			Params:           nil})

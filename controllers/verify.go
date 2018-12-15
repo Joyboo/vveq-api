@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"github.com/astaxie/beego"
 	"github.com/mojocn/base64Captcha"
 	"log"
@@ -12,21 +13,22 @@ type VerifyController struct {
 	beego.Controller
 }
 
-// @Title Get
+// @Title GetCaptcha
 // @Description 获取验证码
 // @Param	postParameters verify.ConfigJsonBody		"verify.ConfigJsonBody"
 // @Success 200 {object} verify.ConfigJsonBody
 // @Failure 403 param is empty
-// @router / [post]
-func (o *VerifyController) Post() {
+// @router /getCaptcha [post]
+func (o *VerifyController) GetCaptcha() {
 	//接收客户端发送来的请求参数
 	var postParameters verify.ConfigJsonBody
-	if err := o.ParseForm(&postParameters); err != nil {
+	if err := json.Unmarshal(o.Ctx.Input.RequestBody, &postParameters); err != nil {
 		log.Println(err)
-		o.Data["code"] = 0
-		o.Data["message"] = "param error"
+		o.Data["json"] = map[string]interface{}{
+			"status":  0,
+			"message": "param error",
+		}
 		o.ServeJSON()
-		return
 	}
 
 	//创建base64图像验证码
@@ -48,9 +50,45 @@ func (o *VerifyController) Post() {
 
 	// 响应
 	//w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	o.Data["code"] = 1
-	o.Data["data"] = base64Png
-	o.Data["captchaId"] = captchaId
-	o.Data["msg"] = "success"
+	o.Data["json"] = map[string]interface{}{
+		"status":    1,
+		"data":      base64Png,
+		"captchaId": captchaId,
+		"message":   "success",
+	}
+	o.ServeJSON()
+}
+
+// @Title VerifyCaptcha
+// @Description 验证码校验
+// @Param	postParameters verify.ConfigJsonBody		"verify.ConfigJsonBody"
+// @Success 200 {object} verify.ConfigJsonBody
+// @Failure 403 param is empty
+// @router /verifyCaptcha [post]
+func (o *VerifyController) VerifyCaptcha() {
+	//接收客户端发送来的请求参数
+	var postParameters verify.ConfigJsonBody
+	if err := json.Unmarshal(o.Ctx.Input.RequestBody, &postParameters); err != nil {
+		log.Println(err)
+		o.Data["json"] = map[string]interface{}{
+			"status":  0,
+			"message": "参数有误",
+		}
+		o.ServeJSON()
+	}
+	//比较图像验证码
+	verifyResult := base64Captcha.VerifyCaptcha(postParameters.Id, postParameters.VerifyValue)
+
+	if verifyResult {
+		o.Data["json"] = map[string]interface{}{
+			"status":  1,
+			"message": "验证通过",
+		}
+	} else {
+		o.Data["json"] = map[string]interface{}{
+			"status":  0,
+			"message": "验证失败",
+		}
+	}
 	o.ServeJSON()
 }

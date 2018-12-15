@@ -15,34 +15,6 @@ type ConfigJsonBody struct {
 	ConfigDigit     base64Captcha.ConfigDigit
 }
 
-// 验证
-/*
-func captchaVerifyHandle(w http.ResponseWriter, r *http.Request) {
-
-	//parse request parameters
-	//接收客户端发送来的请求参数
-	decoder := json.NewDecoder(r.Body)
-	var postParameters ConfigJsonBody
-	err := decoder.Decode(&postParameters)
-	if err != nil {
-		log.Println(err)
-	}
-	defer r.Body.Close()
-	//verify the captcha
-	//比较图像验证码
-	verifyResult := base64Captcha.VerifyCaptcha(postParameters.Id, postParameters.VerifyValue)
-
-	//set json response
-	//设置json响应
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	body := map[string]interface{}{"code": "error", "data": "验证失败", "msg": "captcha failed"}
-	if verifyResult {
-		body = map[string]interface{}{"code": "success", "data": "验证通过", "msg": "captcha verified"}
-	}
-	json.NewEncoder(w).Encode(body)
-}
-*/
-
 func demoCodeCaptchaCreate() {
 	//config struct for digits
 	//数字验证码配置
