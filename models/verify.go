@@ -5,18 +5,60 @@ import (
 	"github.com/mojocn/base64Captcha"
 )
 
-// 请求struct
 type ConfigVerifyBody struct {
-	Id              string
-	CaptchaType     string
-	VerifyValue     string
-	ConfigAudio     base64Captcha.ConfigAudio
-	ConfigCharacter base64Captcha.ConfigCharacter
-	ConfigDigit     base64Captcha.ConfigDigit
+	Id          string
+	CaptchaType string
+	VerifyValue string
 }
 
 func NewConfigVerifyBody() *ConfigVerifyBody {
 	return &ConfigVerifyBody{}
+}
+
+func (c *ConfigVerifyBody) GetConfig() (config interface{}) {
+	switch c.CaptchaType {
+	case "audio":
+		config = c.ConfigAudio
+	case "character":
+		config = c.ConfigCharacter
+	default:
+		config = c.ConfigDigit
+	}
+	return
+}
+
+func (c *ConfigVerifyBody) ConfigAudio() *base64Captcha.ConfigAudio {
+	return &base64Captcha.ConfigAudio{
+		CaptchaLen: 6,
+		Language:   "zh",
+	}
+}
+
+func (c *ConfigVerifyBody) ConfigCharacter() *base64Captcha.ConfigCharacter {
+	return &base64Captcha.ConfigCharacter{
+		Height:             60,
+		Width:              240,
+		Mode:               2,
+		ComplexOfNoiseText: 0,
+		ComplexOfNoiseDot:  0,
+		IsUseSimpleFont:    true,
+		IsShowHollowLine:   false,
+		IsShowNoiseDot:     false,
+		IsShowNoiseText:    false,
+		IsShowSlimeLine:    false,
+		IsShowSineLine:     false,
+		CaptchaLen:         6,
+	}
+}
+
+func (c *ConfigVerifyBody) ConfigDigit() *base64Captcha.ConfigDigit {
+	return &base64Captcha.ConfigDigit{
+		Height:     80,
+		Width:      240,
+		CaptchaLen: 5,
+		MaxSkew:    0.7,
+		DotCount:   80,
+	}
 }
 
 // 验证码校验

@@ -30,15 +30,7 @@ func (o *VerifyController) GetCaptcha() {
 	}
 
 	//创建base64图像验证码
-	var config interface{}
-	switch postParameters.CaptchaType {
-	case "audio":
-		config = postParameters.ConfigAudio
-	case "character":
-		config = postParameters.ConfigCharacter
-	default:
-		config = postParameters.ConfigDigit
-	}
+	config := postParameters.GetConfig()
 	//GenerateCaptcha 第一个参数为空字符串,包会自动在服务器一个随机种子给你产生随机uiid.
 	captchaId, digitCap := base64Captcha.GenerateCaptcha(postParameters.Id, config)
 	base64Png := base64Captcha.CaptchaWriteToBase64Encoding(digitCap)
@@ -52,7 +44,6 @@ func (o *VerifyController) GetCaptcha() {
 		"status":    1,
 		"data":      base64Png,
 		"captchaId": captchaId,
-		"message":   "success",
 	}
 	o.ServeJSON()
 }
@@ -73,9 +64,7 @@ func (o *VerifyController) VerifyCaptcha() {
 		return
 	}
 	//比较图像验证码
-	verifyResult := postParameters.Compare()
-
-	if verifyResult {
+	if verifyResult := postParameters.Compare(); verifyResult {
 		o.Data["json"] = map[string]int{"status": 1}
 	} else {
 		o.Data["json"] = map[string]int{"status": 0}
