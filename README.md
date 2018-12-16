@@ -1,8 +1,18 @@
 # vveq-api 
 
-## User
+#### User
 
-* ### `GET` /api/user/usernameIsExists/:username  查询用户名是否存在
+* `GET`  /api/user/usernameIsExists/:username  查询用户名是否存在
+* `POST` /api/user 用户注册
+
+#### Verify
+
+* `POST` /api/verify/getCaptcha 获取验证码
+* `POST` /api/verify/verifyCaptcha 验证码校验
+
+### User
+
+#### `GET` /api/user/usernameIsExists/:username  查询用户名是否存在
 
 request
 
@@ -16,7 +26,7 @@ response
 :--|:--:|:--:|:--:
 status|Int|是|1：用户名不存在，0：用户名已存在
 
-* ### `POST` /api/user 用户注册
+#### `POST` /api/user 用户注册
 
 request
 
@@ -36,9 +46,9 @@ response
 status|Int|是|1：注册成功，0：注册失败，-1：验证码错误
 data|Int|否|注册成功返回用户id
 
-## Verify
+### Verify
 
-* ### `POST` /api/verify/getCaptcha 获取验证码
+#### `POST` /api/verify/getCaptcha 获取验证码
 
 request
 
@@ -57,7 +67,7 @@ status|Int|是|1：成功，0：失败
 data|String|否|Base64图片验证码
 captchaId|String|否|验证码Id，用户验证码的校验
 
-* ### `POST` /api/verify/verifyCaptcha 验证码校验
+#### `POST` /api/verify/verifyCaptcha 验证码校验
 
 request
 
