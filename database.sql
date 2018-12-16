@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `password` varchar(255) NOT NULL DEFAULT '' COMMENT '密码',
   `email` varchar(50) NOT NULL DEFAULT '' COMMENT 'email地址',
   `avatar` varchar(255) NOT NULL DEFAULT '' COMMENT '头像',
+  `status` tinyint(2) UNSIGNED NOT NULL DEFAULT 1 COMMENT '状态，1-正常，2封禁',
   `instime` int(10) UNSIGNED NOT NULL COMMENT '注册时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY (`username`)

@@ -8,7 +8,7 @@ import (
 )
 
 type User struct {
-	Id            int
+	Id            int64
 	Username      string `orm:"unique"`
 	Nickname      string
 	Password      string
@@ -19,6 +19,8 @@ type User struct {
 	Instime       int64
 }
 
+var tablename = "user"
+
 func NewUser() *User {
 	return &User{}
 }
@@ -28,7 +30,7 @@ func NewUser() *User {
 // @return int46
 // @return error
 func (u *User) GetUserByName(username string) (int64, error) {
-	return orm.NewOrm().QueryTable("user").Filter("username", username).Count()
+	return orm.NewOrm().QueryTable(tablename).Filter("username", username).Count()
 }
 
 func (u *User) AddUser() (int64, error) {
@@ -36,8 +38,13 @@ func (u *User) AddUser() (int64, error) {
 	if err != nil || !b {
 		return 0, err
 	}
+	num, err := u.GetUserByName(u.Username)
+	if num > 0 || err != nil {
+		return 0, err
+	}
 	u.Instime = time.Now().Unix()
 	u.Password = Md5(u.Password)
+	// TODO 走redis队列
 	return orm.NewOrm().Insert(u)
 }
 
@@ -55,6 +62,18 @@ func (u *User) VerifyUserInfo() (bool, error) {
 		return false, err
 	}
 	return true, nil
+}
+
+func (u *User) GetUserById(id int64) (User, error) {
+	var user User
+	err := orm.NewOrm().QueryTable(tablename).Filter("id", id).One(&user)
+	return user, err
+}
+
+func (u *User) Login(username, password string) (User, error) {
+	var user User
+	err := orm.NewOrm().QueryTable(tablename).Filter("username", username).Filter("password", Md5(password)).Filter("status", 1).One(&user)
+	return user, err
 }
 
 /*
@@ -85,15 +104,6 @@ func UpdateUser(uid int, uu *User) (a *User, err error) {
 		return u, nil
 	}
 	return nil, errors.New("User Not Exist")
-}
-
-func Login(username, password string) bool {
-	for _, u := range UserList {
-		if u.Username == username && u.Password == password {
-			return true
-		}
-	}
-	return false
 }
 
 func DeleteUser(uid int) {

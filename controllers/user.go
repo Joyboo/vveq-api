@@ -37,14 +37,16 @@ func (u *UserController) Post() {
 		u.ServeJSON()
 		return
 	}
+
 	uid, err := postParams.From.AddUser()
 	if err != nil || uid <= 0 {
 		beego.Error("uid->", uid, ", 注册用户失败: ", err)
 		u.Data["json"] = map[string]int{"status": 0}
 	} else {
+		postParams.From.Id = uid
 		u.Data["json"] = map[string]interface{}{
 			"status": 1,
-			"data":   uid,
+			"data":   postParams.From,
 		}
 	}
 	u.ServeJSON()
@@ -66,26 +68,25 @@ func (u *UserController) Post() {
 // @Success 200 {object} models.User
 // @Failure 403 :uid is empty
 // @router /:uid [get]
-/*func (u *UserController) Get() {
+func (u *UserController) Get() {
 	// todo 权限鉴定
-	uid := u.GetString(":uid")
-	if uid != "" {
-		user, err := user.GetUser(uid)
+	uid, _ := u.GetInt64(":uid")
+	if uid > 0 {
+		user, err := models.NewUser().GetUserById(uid)
 		if err != nil {
 			u.Data["json"] = map[string]interface{}{
-				"status":  0,
-				"message": err.Error(),
+				"status": 0,
+				"data":   err.Error(),
 			}
 		} else {
 			u.Data["json"] = map[string]interface{}{
-				"status":  1,
-				"message": "success",
-				"data":    user,
+				"status": 1,
+				"data":   user,
 			}
 		}
 	}
 	u.ServeJSON()
-}*/
+}
 
 // @Title Update
 // @Description update the user
@@ -132,17 +133,21 @@ func (u *UserController) Post() {
 // @Param	password		query 	string	true		"The password for login"
 // @Success 200 {string} login success
 // @Failure 403 user not exist
-// @router /login [get]
-/*func (u *UserController) Login() {
+// @router /login [post]
+func (u *UserController) Login() {
 	username := u.GetString("username")
 	password := u.GetString("password")
-	if user.Login(username, password) {
-		u.Data["json"] = "login success"
+	user, err := models.NewUser().Login(username, password)
+	if err != nil {
+		u.Data["json"] = map[string]int{"status": 0}
 	} else {
-		u.Data["json"] = "user not exist"
+		u.Data["json"] = map[string]interface{}{
+			"status": 1,
+			"data":   user,
+		}
 	}
 	u.ServeJSON()
-}*/
+}
 
 // @Title logout
 // @Description Logs out current logged in user session

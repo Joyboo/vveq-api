@@ -4,6 +4,8 @@
 
 * `GET`  /api/user/usernameIsExists/:username  查询用户名是否存在
 * `POST` /api/user 用户注册
+* `POST` /api/user/login 用户登录
+* `GET`  /api/user/:uid 获取用户信息
 
 #### Verify
 
@@ -44,7 +46,39 @@ response
 参数名|类型|是否必传|说明
 :--|:--:|:--:|:--:
 status|Int|是|1：注册成功，0：注册失败，-1：验证码错误
-data|Int|否|注册成功返回用户id
+data|Struct|否|注册成功返回用户信息
+
+#### `POST` /api/user/login 用户登录
+
+request
+
+参数名|类型|是否必传|说明
+:--|:--:|:--:|:--:
+username|string|是|用户名
+password|string|是|密码
+
+response 
+
+参数名|类型|是否必传|说明
+:--|:--:|:--:|:--:
+status|Int|是|1：成功，0：失败
+data|Struct|否|登录成功返回用户信息
+
+
+#### `GET`  /api/user/:uid 获取用户信息
+
+request
+
+参数名|类型|是否必传|说明
+:--|:--:|:--:|:--:
+uid|Int|是|用户id
+
+response 
+
+参数名|类型|是否必传|说明
+:--|:--:|:--:|:--:
+status|Int|是|1：成功，0：失败
+data|Struct或Error|否|注册成功返回用户信息,失败返回失败信息
 
 ### Verify
 

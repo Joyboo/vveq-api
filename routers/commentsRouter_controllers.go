@@ -17,6 +17,22 @@ func init() {
 
 	beego.GlobalControllerRouter["vveq-api/controllers:UserController"] = append(beego.GlobalControllerRouter["vveq-api/controllers:UserController"],
 		beego.ControllerComments{
+			Method:           "Get",
+			Router:           `/:uid`,
+			AllowHTTPMethods: []string{"get"},
+			MethodParams:     param.Make(),
+			Params:           nil})
+
+	beego.GlobalControllerRouter["vveq-api/controllers:UserController"] = append(beego.GlobalControllerRouter["vveq-api/controllers:UserController"],
+		beego.ControllerComments{
+			Method:           "Login",
+			Router:           `/login`,
+			AllowHTTPMethods: []string{"post"},
+			MethodParams:     param.Make(),
+			Params:           nil})
+
+	beego.GlobalControllerRouter["vveq-api/controllers:UserController"] = append(beego.GlobalControllerRouter["vveq-api/controllers:UserController"],
+		beego.ControllerComments{
 			Method:           "UsernameIsExists",
 			Router:           `/usernameIsExists/:username`,
 			AllowHTTPMethods: []string{"get"},
