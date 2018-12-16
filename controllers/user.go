@@ -38,8 +38,8 @@ func (u *UserController) Post() {
 		return
 	}
 	uid, err := postParams.From.AddUser()
-	if err != nil {
-		beego.Error("注册用户失败: ", err)
+	if err != nil || uid <= 0 {
+		beego.Error("uid->", uid, ", 注册用户失败: ", err)
 		u.Data["json"] = map[string]int{"status": 0}
 	} else {
 		u.Data["json"] = map[string]interface{}{

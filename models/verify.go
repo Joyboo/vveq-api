@@ -18,24 +18,24 @@ func NewConfigVerifyBody() *ConfigVerifyBody {
 func (c *ConfigVerifyBody) GetConfig() (config interface{}) {
 	switch c.CaptchaType {
 	case "audio":
-		config = c.ConfigAudio
+		config = c.ConfigAudio()
 	case "character":
-		config = c.ConfigCharacter
+		config = c.ConfigCharacter()
 	default:
-		config = c.ConfigDigit
+		config = c.ConfigDigit()
 	}
 	return
 }
 
-func (c *ConfigVerifyBody) ConfigAudio() *base64Captcha.ConfigAudio {
-	return &base64Captcha.ConfigAudio{
+func (c *ConfigVerifyBody) ConfigAudio() base64Captcha.ConfigAudio {
+	return base64Captcha.ConfigAudio{
 		CaptchaLen: 6,
 		Language:   "zh",
 	}
 }
 
-func (c *ConfigVerifyBody) ConfigCharacter() *base64Captcha.ConfigCharacter {
-	return &base64Captcha.ConfigCharacter{
+func (c *ConfigVerifyBody) ConfigCharacter() base64Captcha.ConfigCharacter {
+	return base64Captcha.ConfigCharacter{
 		Height:             60,
 		Width:              240,
 		Mode:               2,
@@ -51,8 +51,8 @@ func (c *ConfigVerifyBody) ConfigCharacter() *base64Captcha.ConfigCharacter {
 	}
 }
 
-func (c *ConfigVerifyBody) ConfigDigit() *base64Captcha.ConfigDigit {
-	return &base64Captcha.ConfigDigit{
+func (c *ConfigVerifyBody) ConfigDigit() base64Captcha.ConfigDigit {
+	return base64Captcha.ConfigDigit{
 		Height:     80,
 		Width:      240,
 		CaptchaLen: 5,

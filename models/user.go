@@ -2,18 +2,21 @@ package models
 
 import (
 	"github.com/astaxie/beego/orm"
+	"regexp"
 	"time"
+	"unicode/utf8"
 )
 
 type User struct {
-	Id       int
-	Username string `orm:"unique"`
-	Nickname string
-	Password string
-	Email    string
-	Tel      string
-	Avatar   string
-	Instime  int64
+	Id            int
+	Username      string `orm:"unique"`
+	Nickname      string
+	Password      string
+	CheckPassword string `orm:"-"`
+	Email         string
+	Tel           string
+	Avatar        string
+	Instime       int64
 }
 
 func NewUser() *User {
@@ -29,9 +32,29 @@ func (u *User) GetUserByName(username string) (int64, error) {
 }
 
 func (u *User) AddUser() (int64, error) {
+	b, err := u.VerifyUserInfo()
+	if err != nil || !b {
+		return 0, err
+	}
 	u.Instime = time.Now().Unix()
 	u.Password = Md5(u.Password)
 	return orm.NewOrm().Insert(u)
+}
+
+// 字段校验
+func (u *User) VerifyUserInfo() (bool, error) {
+	if u.Password != u.CheckPassword || utf8.RuneCountInString(u.Password) < 6 {
+		return false, nil
+	}
+	isokUsername, err := regexp.MatchString(`^[a-zA-Z_\d]{4,20}$`, u.Username)
+	if !isokUsername || err != nil {
+		return false, err
+	}
+	isokEmail, err := regexp.MatchString(`^[0-9A-Za-z][\.-_0-9A-Za-z]*@[0-9A-Za-z]+(\.[A-Za-z]+)+$`, u.Email)
+	if !isokEmail || err != nil {
+		return false, err
+	}
+	return true, nil
 }
 
 /*
