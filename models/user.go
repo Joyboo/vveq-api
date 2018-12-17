@@ -17,6 +17,7 @@ type User struct {
 	Tel           string
 	Avatar        string
 	Instime       int64
+	Status        int `json:"-"`
 }
 
 var tablename = "user"
@@ -70,9 +71,9 @@ func (u *User) GetUserById(id int64) (User, error) {
 	return user, err
 }
 
-func (u *User) Login(username, password string) (User, error) {
+func (u *User) Login() (User, error) {
 	var user User
-	err := orm.NewOrm().QueryTable(tablename).Filter("username", username).Filter("password", Md5(password)).Filter("status", 1).One(&user)
+	err := orm.NewOrm().QueryTable(tablename).Filter("username", u.Username).Filter("password", Md5(u.Password)).Filter("status", 1).One(&user)
 	return user, err
 }
 

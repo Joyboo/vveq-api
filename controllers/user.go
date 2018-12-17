@@ -135,15 +135,23 @@ func (u *UserController) Get() {
 // @Failure 403 user not exist
 // @router /login [post]
 func (u *UserController) Login() {
-	username := u.GetString("username")
-	password := u.GetString("password")
-	user, err := models.NewUser().Login(username, password)
+	var user models.User
+	json.Unmarshal(u.Ctx.Input.RequestBody, &user)
+	user, err := user.Login()
 	if err != nil {
 		u.Data["json"] = map[string]int{"status": 0}
 	} else {
 		u.Data["json"] = map[string]interface{}{
 			"status": 1,
-			"data":   user,
+			"data": map[string]interface{}{
+				"id":       user.Id,
+				"username": user.Username,
+				"nickname": user.Nickname,
+				"email":    user.Email,
+				"tel":      user.Tel,
+				"avatar":   user.Avatar,
+				"instime":  user.Instime,
+			},
 		}
 	}
 	u.ServeJSON()
