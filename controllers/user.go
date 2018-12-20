@@ -43,10 +43,17 @@ func (u *UserController) Post() {
 		beego.Error("uid->", uid, ", 注册用户失败: ", err)
 		u.Data["json"] = map[string]int{"status": 0}
 	} else {
-		postParams.From.Id = uid
 		u.Data["json"] = map[string]interface{}{
 			"status": 1,
-			"data":   postParams.From,
+			"data": map[string]interface{}{
+				"id":       uid,
+				"username": postParams.From.Username,
+				"nickname": postParams.From.Nickname,
+				"email":    postParams.From.Email,
+				"tel":      postParams.From.Tel,
+				"avatar":   postParams.From.Avatar,
+				"instime":  postParams.From.Instime,
+			},
 		}
 	}
 	u.ServeJSON()
@@ -139,8 +146,18 @@ func (u *UserController) Login() {
 	json.Unmarshal(u.Ctx.Input.RequestBody, &user)
 	user, err := user.Login()
 	if err != nil {
+		beego.Error("登录出错了-->", err)
 		u.Data["json"] = map[string]int{"status": 0}
 	} else {
+
+		go func() {
+			dau := &models.Dau{
+				Uid: user.Id,
+				Ip:  models.IpString2Int(u.Ctx.Request.RemoteAddr),
+			}
+			dau.AddDau()
+		}()
+
 		u.Data["json"] = map[string]interface{}{
 			"status": 1,
 			"data": map[string]interface{}{

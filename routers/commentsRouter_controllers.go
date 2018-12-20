@@ -13,6 +13,7 @@ func init() {
 			Router:           `/`,
 			AllowHTTPMethods: []string{"post"},
 			MethodParams:     param.Make(),
+			Filters:          nil,
 			Params:           nil})
 
 	beego.GlobalControllerRouter["vveq-api/controllers:UserController"] = append(beego.GlobalControllerRouter["vveq-api/controllers:UserController"],
@@ -21,6 +22,7 @@ func init() {
 			Router:           `/:uid`,
 			AllowHTTPMethods: []string{"get"},
 			MethodParams:     param.Make(),
+			Filters:          nil,
 			Params:           nil})
 
 	beego.GlobalControllerRouter["vveq-api/controllers:UserController"] = append(beego.GlobalControllerRouter["vveq-api/controllers:UserController"],
@@ -29,6 +31,7 @@ func init() {
 			Router:           `/login`,
 			AllowHTTPMethods: []string{"post"},
 			MethodParams:     param.Make(),
+			Filters:          nil,
 			Params:           nil})
 
 	beego.GlobalControllerRouter["vveq-api/controllers:UserController"] = append(beego.GlobalControllerRouter["vveq-api/controllers:UserController"],
@@ -37,6 +40,7 @@ func init() {
 			Router:           `/usernameIsExists/:username`,
 			AllowHTTPMethods: []string{"get"},
 			MethodParams:     param.Make(),
+			Filters:          nil,
 			Params:           nil})
 
 	beego.GlobalControllerRouter["vveq-api/controllers:VerifyController"] = append(beego.GlobalControllerRouter["vveq-api/controllers:VerifyController"],
@@ -45,6 +49,7 @@ func init() {
 			Router:           `/getCaptcha`,
 			AllowHTTPMethods: []string{"post"},
 			MethodParams:     param.Make(),
+			Filters:          nil,
 			Params:           nil})
 
 	beego.GlobalControllerRouter["vveq-api/controllers:VerifyController"] = append(beego.GlobalControllerRouter["vveq-api/controllers:VerifyController"],
@@ -53,6 +58,7 @@ func init() {
 			Router:           `/verifyCaptcha`,
 			AllowHTTPMethods: []string{"post"},
 			MethodParams:     param.Make(),
+			Filters:          nil,
 			Params:           nil})
 
 }
