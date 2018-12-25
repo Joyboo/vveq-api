@@ -10,6 +10,11 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+type Model interface {
+	TableName() string
+	Add() (int64, error)
+}
+
 func init() {
 	dbhost := beego.AppConfig.String("db.host")
 	dbport := beego.AppConfig.String("db.port")

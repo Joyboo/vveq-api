@@ -20,7 +20,9 @@ type User struct {
 	Status        int
 }
 
-var tablenameUser = "user"
+func (d *User) TableName() string {
+	return "user"
+}
 
 func NewUser() *User {
 	return &User{}
@@ -31,11 +33,11 @@ func NewUser() *User {
 // @return int46
 // @return error
 func (u *User) GetUserByName(username string) (int64, error) {
-	return orm.NewOrm().QueryTable(tablenameUser).Filter("username", username).Count()
+	return orm.NewOrm().QueryTable(u.TableName()).Filter("username", username).Count()
 }
 
 // 添加新用户
-func (u *User) AddUser() (int64, error) {
+func (u *User) Add() (int64, error) {
 	b, err := u.VerifyUserInfo()
 	if err != nil || !b {
 		return 0, err
@@ -69,13 +71,13 @@ func (u *User) VerifyUserInfo() (bool, error) {
 
 func (u *User) GetUserById(id int64) (User, error) {
 	var user User
-	err := orm.NewOrm().QueryTable(tablenameUser).Filter("id", id).One(&user)
+	err := orm.NewOrm().QueryTable(u.TableName()).Filter("id", id).One(&user)
 	return user, err
 }
 
 func (u *User) Login() (User, error) {
 	var user User
-	err := orm.NewOrm().QueryTable(tablenameUser).Filter("username", u.Username).Filter("password", Md5(u.Password)).Filter("status", 1).One(&user)
+	err := orm.NewOrm().QueryTable(u.TableName()).Filter("username", u.Username).Filter("password", Md5(u.Password)).Filter("status", 1).One(&user)
 	return user, err
 }
 

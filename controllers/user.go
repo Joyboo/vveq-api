@@ -38,7 +38,7 @@ func (u *UserController) Post() {
 		return
 	}
 
-	uid, err := postParams.From.AddUser()
+	uid, err := postParams.From.Add()
 	if err != nil || uid <= 0 {
 		beego.Error("uid->", uid, ", 注册用户失败: ", err)
 		u.Data["json"] = map[string]int{"status": 0}
@@ -155,7 +155,7 @@ func (u *UserController) Login() {
 				Uid: user.Id,
 				Ip:  models.IpString2Int(u.Ctx.Request.RemoteAddr),
 			}
-			dau.AddDau()
+			dau.Add()
 		}()
 
 		u.Data["json"] = map[string]interface{}{

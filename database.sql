@@ -69,6 +69,15 @@ CREATE TABLE IF NOT EXISTS `cate` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='分类表';
 
+CREATE TABLE IF NOT EXISTS `tag` (
+  `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL DEFAULT '' COMMENT '标签名称',
+  `status` tinyint(2) UNSIGNED NOT NULL DEFAULT 1 COMMENT '1：正常,0：禁用',
+  `insuid` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '添加用户id',
+  `instime` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '添加时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='标签';
+
 CREATE TABLE IF NOT EXISTS `theme` (
   `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
   `cid` smallint(5) UNSIGNED NOT NULL DEFAULT 0 COMMENT '分类id',
@@ -77,6 +86,8 @@ CREATE TABLE IF NOT EXISTS `theme` (
   `uid` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户id',
   `click` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '点击',
   `like` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '点赞',
+  `tagid` smallint(5) UNSIGNED NOT NULL DEFAULT 0 COMMENT '标签id',
+  `sort` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '排序',
   `instime` int(10) NOT NULL DEFAULT 0 COMMENT '添加时间',
   `lastreplytime` int(10) NOT NULL DEFAULT 0 COMMENT '最后回复时间',
   PRIMARY KEY (`id`,`instime`),

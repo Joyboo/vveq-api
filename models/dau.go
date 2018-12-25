@@ -15,13 +15,15 @@ type Dau struct {
 	Instime int64
 }
 
-var tablenameDau = "dau"
+func (d *Dau) TableName() string {
+	return "dau"
+}
 
 func newDau() *Dau {
 	return &Dau{}
 }
 
-func (d *Dau) AddDau() (int64, error) {
+func (d *Dau) Add() (int64, error) {
 	d.Instime = time.Now().Unix()
 	// TODO 走redis队列
 	return orm.NewOrm().Insert(d)
