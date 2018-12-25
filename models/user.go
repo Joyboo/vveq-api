@@ -20,7 +20,7 @@ type User struct {
 	Status        int
 }
 
-func (d *User) TableName() string {
+func (this *User) TableName() string {
 	return "user"
 }
 
@@ -32,52 +32,52 @@ func NewUser() *User {
 // @param username string
 // @return int46
 // @return error
-func (u *User) GetUserByName(username string) (int64, error) {
-	return orm.NewOrm().QueryTable(u.TableName()).Filter("username", username).Count()
+func (this *User) GetUserByName(username string) (int64, error) {
+	return orm.NewOrm().QueryTable(this.TableName()).Filter("username", username).Count()
 }
 
 // 添加新用户
-func (u *User) Add() (int64, error) {
-	b, err := u.VerifyUserInfo()
+func (this *User) Add() (int64, error) {
+	b, err := this.VerifyUserInfo()
 	if err != nil || !b {
 		return 0, err
 	}
-	num, err := u.GetUserByName(u.Username)
+	num, err := this.GetUserByName(this.Username)
 	if num > 0 || err != nil {
 		return 0, err
 	}
-	u.Status = 1
-	u.Instime = time.Now().Unix()
-	u.Password = Md5(u.Password)
+	this.Status = 1
+	this.Instime = time.Now().Unix()
+	this.Password = Md5(this.Password)
 	// TODO 走redis队列
-	return orm.NewOrm().Insert(u)
+	return orm.NewOrm().Insert(this)
 }
 
 // 字段校验
-func (u *User) VerifyUserInfo() (bool, error) {
-	if u.Password != u.CheckPassword || utf8.RuneCountInString(u.Password) < 6 {
+func (this *User) VerifyUserInfo() (bool, error) {
+	if this.Password != this.CheckPassword || utf8.RuneCountInString(this.Password) < 6 {
 		return false, nil
 	}
-	isokUsername, err := regexp.MatchString(`^[a-zA-Z_\d]{4,20}$`, u.Username)
+	isokUsername, err := regexp.MatchString(`^[a-zA-Z_\d]{4,20}$`, this.Username)
 	if !isokUsername || err != nil {
 		return false, err
 	}
-	isokEmail, err := regexp.MatchString(`^[0-9A-Za-z][\.-_0-9A-Za-z]*@[0-9A-Za-z]+(\.[A-Za-z]+)+$`, u.Email)
+	isokEmail, err := regexp.MatchString(`^[0-9A-Za-z][\.-_0-9A-Za-z]*@[0-9A-Za-z]+(\.[A-Za-z]+)+$`, this.Email)
 	if !isokEmail || err != nil {
 		return false, err
 	}
 	return true, nil
 }
 
-func (u *User) GetUserById(id int64) (User, error) {
+func (this *User) GetUserById(id int64) (User, error) {
 	var user User
-	err := orm.NewOrm().QueryTable(u.TableName()).Filter("id", id).One(&user)
+	err := orm.NewOrm().QueryTable(this.TableName()).Filter("id", id).One(&user)
 	return user, err
 }
 
-func (u *User) Login() (User, error) {
+func (this *User) Login() (User, error) {
 	var user User
-	err := orm.NewOrm().QueryTable(u.TableName()).Filter("username", u.Username).Filter("password", Md5(u.Password)).Filter("status", 1).One(&user)
+	err := orm.NewOrm().QueryTable(this.TableName()).Filter("username", this.Username).Filter("password", Md5(this.Password)).Filter("status", 1).One(&user)
 	return user, err
 }
 

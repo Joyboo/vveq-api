@@ -9,7 +9,7 @@ import (
 
 // Operations about Users
 type UserController struct {
-	beego.Controller
+	BaseController
 }
 
 type postPar struct {
@@ -23,27 +23,27 @@ type postPar struct {
 // @Success 200 {int} model.User.Id
 // @Failure 403 body is empty
 // @router / [post]
-func (u *UserController) Post() {
+func (this *UserController) Post() {
 	var postParams postPar
-	err := json.Unmarshal(u.Ctx.Input.RequestBody, &postParams)
+	err := json.Unmarshal(this.Ctx.Input.RequestBody, &postParams)
 	if err != nil {
-		u.Data["json"] = map[string]int{"status": 0}
-		u.ServeJSON()
+		this.Data["json"] = map[string]int{"status": 0}
+		this.ServeJSON()
 		return
 	}
 	// 验证码校验
 	if verifyResult := postParams.Verify.Compare(); !verifyResult {
-		u.Data["json"] = map[string]int{"status": -1}
-		u.ServeJSON()
+		this.Data["json"] = map[string]int{"status": -1}
+		this.ServeJSON()
 		return
 	}
 
 	uid, err := postParams.From.Add()
 	if err != nil || uid <= 0 {
 		beego.Error("uid->", uid, ", 注册用户失败: ", err)
-		u.Data["json"] = map[string]int{"status": 0}
+		this.Data["json"] = map[string]int{"status": 0}
 	} else {
-		u.Data["json"] = map[string]interface{}{
+		this.Data["json"] = map[string]interface{}{
 			"status": 1,
 			"data": map[string]interface{}{
 				"id":       uid,
@@ -56,7 +56,7 @@ func (u *UserController) Post() {
 			},
 		}
 	}
-	u.ServeJSON()
+	this.ServeJSON()
 }
 
 // @Title GetAll
@@ -75,24 +75,24 @@ func (u *UserController) Post() {
 // @Success 200 {object} models.User
 // @Failure 403 :uid is empty
 // @router /:uid [get]
-func (u *UserController) Get() {
+func (this *UserController) Get() {
 	// todo 权限鉴定
-	uid, _ := u.GetInt64(":uid")
+	uid, _ := this.GetInt64(":uid")
 	if uid > 0 {
 		user, err := models.NewUser().GetUserById(uid)
 		if err != nil {
-			u.Data["json"] = map[string]interface{}{
+			this.Data["json"] = map[string]interface{}{
 				"status": 0,
 				"data":   err.Error(),
 			}
 		} else {
-			u.Data["json"] = map[string]interface{}{
+			this.Data["json"] = map[string]interface{}{
 				"status": 1,
 				"data":   user,
 			}
 		}
 	}
-	u.ServeJSON()
+	this.ServeJSON()
 }
 
 // @Title Update
@@ -141,24 +141,24 @@ func (u *UserController) Get() {
 // @Success 200 {string} login success
 // @Failure 403 user not exist
 // @router /login [post]
-func (u *UserController) Login() {
+func (this *UserController) Login() {
 	var user models.User
-	json.Unmarshal(u.Ctx.Input.RequestBody, &user)
+	json.Unmarshal(this.Ctx.Input.RequestBody, &user)
 	user, err := user.Login()
 	if err != nil {
 		beego.Error("登录出错了-->", err)
-		u.Data["json"] = map[string]int{"status": 0}
+		this.Data["json"] = map[string]int{"status": 0}
 	} else {
 
 		go func() {
 			dau := &models.Dau{
 				Uid: user.Id,
-				Ip:  models.IpString2Int(u.Ctx.Request.RemoteAddr),
+				Ip:  models.IpString2Int(this.Ctx.Request.RemoteAddr),
 			}
 			dau.Add()
 		}()
 
-		u.Data["json"] = map[string]interface{}{
+		this.Data["json"] = map[string]interface{}{
 			"status": 1,
 			"data": map[string]interface{}{
 				"id":       user.Id,
@@ -171,7 +171,7 @@ func (u *UserController) Login() {
 			},
 		}
 	}
-	u.ServeJSON()
+	this.ServeJSON()
 }
 
 // @Title logout
@@ -187,15 +187,15 @@ func (u *UserController) Login() {
 // @Description 用户名是否存在
 // @Success 200 {string} logout success
 // @router /usernameIsExists/:username [get]
-func (u *UserController) UsernameIsExists() {
-	username := u.GetString(":username")
+func (this *UserController) UsernameIsExists() {
+	username := this.GetString(":username")
 	if username != "" {
 		num, err := models.NewUser().GetUserByName(username)
 		if err == nil && num <= 0 {
-			u.Data["json"] = map[string]int{"status": 1}
+			this.Data["json"] = map[string]int{"status": 1}
 		} else {
-			u.Data["json"] = map[string]int{"status": 0}
+			this.Data["json"] = map[string]int{"status": 0}
 		}
 	}
-	u.ServeJSON()
+	this.ServeJSON()
 }

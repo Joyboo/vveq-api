@@ -15,26 +15,26 @@ func NewConfigVerifyBody() *ConfigVerifyBody {
 	return &ConfigVerifyBody{}
 }
 
-func (c *ConfigVerifyBody) GetConfig() (config interface{}) {
-	switch c.CaptchaType {
+func (this *ConfigVerifyBody) GetConfig() (config interface{}) {
+	switch this.CaptchaType {
 	case "audio":
-		config = c.ConfigAudio()
+		config = this.ConfigAudio()
 	case "character":
-		config = c.ConfigCharacter()
+		config = this.ConfigCharacter()
 	default:
-		config = c.ConfigDigit()
+		config = this.ConfigDigit()
 	}
 	return
 }
 
-func (c *ConfigVerifyBody) ConfigAudio() base64Captcha.ConfigAudio {
+func (this *ConfigVerifyBody) ConfigAudio() base64Captcha.ConfigAudio {
 	return base64Captcha.ConfigAudio{
 		CaptchaLen: 6,
 		Language:   "zh",
 	}
 }
 
-func (c *ConfigVerifyBody) ConfigCharacter() base64Captcha.ConfigCharacter {
+func (this *ConfigVerifyBody) ConfigCharacter() base64Captcha.ConfigCharacter {
 	return base64Captcha.ConfigCharacter{
 		Height:             60,
 		Width:              240,
@@ -51,7 +51,7 @@ func (c *ConfigVerifyBody) ConfigCharacter() base64Captcha.ConfigCharacter {
 	}
 }
 
-func (c *ConfigVerifyBody) ConfigDigit() base64Captcha.ConfigDigit {
+func (this *ConfigVerifyBody) ConfigDigit() base64Captcha.ConfigDigit {
 	return base64Captcha.ConfigDigit{
 		Height:     80,
 		Width:      240,
@@ -62,11 +62,11 @@ func (c *ConfigVerifyBody) ConfigDigit() base64Captcha.ConfigDigit {
 }
 
 // 验证码校验
-func (c *ConfigVerifyBody) Compare() bool {
-	return base64Captcha.VerifyCaptcha(c.Id, c.VerifyValue)
+func (this *ConfigVerifyBody) Compare() bool {
+	return base64Captcha.VerifyCaptcha(this.Id, this.VerifyValue)
 }
 
-func (c *ConfigVerifyBody) demoCodeCaptchaCreate() {
+func (this *ConfigVerifyBody) demoCodeCaptchaCreate() {
 	//config struct for digits
 	//数字验证码配置
 	var configD = base64Captcha.ConfigDigit{

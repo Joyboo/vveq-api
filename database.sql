@@ -89,6 +89,7 @@ CREATE TABLE IF NOT EXISTS `theme` (
   `tagid` smallint(5) UNSIGNED NOT NULL DEFAULT 0 COMMENT '标签id',
   `sort` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '排序',
   `instime` int(10) NOT NULL DEFAULT 0 COMMENT '添加时间',
+  `status` tinyint(2) UNSIGNED NOT NULL DEFAULT 1 COMMENT '1：正常,0：删除',
   `lastreplytime` int(10) NOT NULL DEFAULT 0 COMMENT '最后回复时间',
   PRIMARY KEY (`id`,`instime`),
   KEY `cid` (`cid`),

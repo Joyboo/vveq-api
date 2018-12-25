@@ -8,7 +8,7 @@ type Tag struct {
 	Instime int64
 }
 
-func (t *Tag) TableName() string {
+func (this *Tag) TableName() string {
 	return "theme"
 }
 
@@ -16,6 +16,6 @@ func NewTag() *Tag {
 	return &Tag{}
 }
 
-func (t *Tag) Add() (int64, error) {
+func (this *Tag) Add() (int64, error) {
 	return 0, nil
 }

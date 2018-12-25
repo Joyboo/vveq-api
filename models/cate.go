@@ -13,7 +13,7 @@ type Cate struct {
 	Updtime int64
 }
 
-func (t *Cate) TableName() string {
+func (this *Cate) TableName() string {
 	return "theme"
 }
 
@@ -21,6 +21,6 @@ func NewCate() *Cate {
 	return &Cate{}
 }
 
-func (t *Cate) Add() (int64, error) {
+func (this *Cate) Add() (int64, error) {
 	return 0, nil
 }

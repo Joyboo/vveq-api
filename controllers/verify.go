@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"github.com/astaxie/beego"
 	"github.com/mojocn/base64Captcha"
 	"log"
 	"vveq-api/models"
@@ -10,7 +9,7 @@ import (
 
 // Operations about verify
 type VerifyController struct {
-	beego.Controller
+	BaseController
 }
 
 // @Title GetCaptcha
@@ -19,13 +18,13 @@ type VerifyController struct {
 // @Success 200 {object} models.ConfigVerifyBody
 // @Failure 403 param is empty
 // @router /getCaptcha [post]
-func (o *VerifyController) GetCaptcha() {
+func (this *VerifyController) GetCaptcha() {
 	//接收客户端发送来的请求参数
 	var postParameters models.ConfigVerifyBody
-	if err := json.Unmarshal(o.Ctx.Input.RequestBody, &postParameters); err != nil {
+	if err := json.Unmarshal(this.Ctx.Input.RequestBody, &postParameters); err != nil {
 		log.Println(err)
-		o.Data["json"] = map[string]int{"status": 0}
-		o.ServeJSON()
+		this.Data["json"] = map[string]int{"status": 0}
+		this.ServeJSON()
 		return
 	}
 
@@ -40,12 +39,12 @@ func (o *VerifyController) GetCaptcha() {
 
 	// 响应
 	//w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	o.Data["json"] = map[string]interface{}{
+	this.Data["json"] = map[string]interface{}{
 		"status":    1,
 		"data":      base64Png,
 		"captchaId": captchaId,
 	}
-	o.ServeJSON()
+	this.ServeJSON()
 }
 
 // @Title VerifyCaptcha
@@ -54,20 +53,20 @@ func (o *VerifyController) GetCaptcha() {
 // @Success 200 {object} models.ConfigVerifyBody
 // @Failure 403 param is empty
 // @router /verifyCaptcha [post]
-func (o *VerifyController) VerifyCaptcha() {
+func (this *VerifyController) VerifyCaptcha() {
 	//接收客户端发送来的请求参数
 	var postParameters models.ConfigVerifyBody
-	if err := json.Unmarshal(o.Ctx.Input.RequestBody, &postParameters); err != nil {
+	if err := json.Unmarshal(this.Ctx.Input.RequestBody, &postParameters); err != nil {
 		log.Println(err)
-		o.Data["json"] = map[string]int{"status": 0}
-		o.ServeJSON()
+		this.Data["json"] = map[string]int{"status": 0}
+		this.ServeJSON()
 		return
 	}
 	//比较图像验证码
 	if verifyResult := postParameters.Compare(); verifyResult {
-		o.Data["json"] = map[string]int{"status": 1}
+		this.Data["json"] = map[string]int{"status": 1}
 	} else {
-		o.Data["json"] = map[string]int{"status": 0}
+		this.Data["json"] = map[string]int{"status": 0}
 	}
-	o.ServeJSON()
+	this.ServeJSON()
 }

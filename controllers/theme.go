@@ -1,52 +1,37 @@
 package controllers
 
 import (
-	"github.com/astaxie/beego"
+	"encoding/json"
+	"vveq-api/models"
 )
 
 // Operations about Users
 type ThemeController struct {
-	beego.Controller
+	BaseController
 }
 
-// @Title CreateUser
-// @Description create users
-// @Param	body		body 	models.User	true		"body for user content"
-// @Success 200 {int} model.User.Id
+// @Title CreateTheme
+// @Description create Theme
+// @Param	body		body 	models.Theme	true		"body for Theme content"
+// @Success 200 {int} model.Theme.Id
 // @Failure 403 body is empty
 // @router / [post]
-func (u *ThemeController) Post() {
-	/*var postParams models.Theme
-	err := json.Unmarshal(u.Ctx.Input.RequestBody, &postParams)
+func (this *ThemeController) Post() {
+	var postParams models.Theme
+	err := json.Unmarshal(this.Ctx.Input.RequestBody, &postParams)
 	if err != nil {
-		u.Data["json"] = map[string]int{"status": 0}
-		u.ServeJSON()
+		this.Data["json"] = map[string]int{"status": 0}
+		this.ServeJSON()
 		return
 	}
-	// 验证码校验
-	if verifyResult := postParams.Verify.Compare(); !verifyResult {
-		u.Data["json"] = map[string]int{"status": -1}
-		u.ServeJSON()
-		return
-	}
-
-	uid, err := postParams.From.Add()
-	if err != nil || uid <= 0 {
-		beego.Error("uid->", uid, ", 注册用户失败: ", err)
-		u.Data["json"] = map[string]int{"status": 0}
+	id, err := postParams.Add()
+	if err == nil || id <= 0 {
+		this.Data["json"] = map[string]int{"status": 0}
 	} else {
-		u.Data["json"] = map[string]interface{}{
+		this.Data["json"] = map[string]int64{
 			"status": 1,
-			"data": map[string]interface{}{
-				"id":       uid,
-				"username": postParams.From.Username,
-				"nickname": postParams.From.Nickname,
-				"email":    postParams.From.Email,
-				"tel":      postParams.From.Tel,
-				"avatar":   postParams.From.Avatar,
-				"instime":  postParams.From.Instime,
-			},
+			"data":   id,
 		}
-	}*/
-	u.ServeJSON()
+	}
+	this.ServeJSON()
 }

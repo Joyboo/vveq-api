@@ -14,18 +14,35 @@ import (
 )
 
 func init() {
-	ns := beego.NewNamespace("/api",
+	view := beego.NewNamespace("/api",
 		beego.NSNamespace("/user",
 			beego.NSInclude(
 				&controllers.UserController{},
 			),
 		),
-		// 验证码
 		beego.NSNamespace("/verify",
 			beego.NSInclude(
 				&controllers.VerifyController{},
 			),
 		),
+		beego.NSNamespace("/theme",
+			beego.NSInclude(
+				&controllers.ThemeController{},
+			),
+		),
 	)
-	beego.AddNamespace(ns)
+
+	admin := beego.NewNamespace("/admin",
+		beego.NSNamespace("/cate",
+			beego.NSInclude(
+				&controllers.CateController{},
+			),
+		),
+		beego.NSNamespace("/tag",
+			beego.NSInclude(
+				&controllers.TagController{},
+			),
+		),
+	)
+	beego.AddNamespace(view, admin)
 }
