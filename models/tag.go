@@ -9,7 +9,7 @@ type Tag struct {
 }
 
 func (this *Tag) TableName() string {
-	return "theme"
+	return "tag"
 }
 
 func NewTag() *Tag {

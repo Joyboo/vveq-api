@@ -37,7 +37,13 @@ func init() {
 	if err != nil {
 		beego.Error("注册默认数据库失败: ", err)
 	}
-	orm.RegisterModel(new(User), new(Dau))
+	orm.RegisterModel(
+		new(User),
+		new(Dau),
+		new(Cate),
+		new(Theme),
+		new(Tag),
+	)
 
 	if beego.AppConfig.String("runmode") == "dev" {
 		orm.Debug = true

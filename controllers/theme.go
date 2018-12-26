@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"github.com/astaxie/beego"
 	"vveq-api/models"
 )
 
@@ -20,12 +21,14 @@ func (this *ThemeController) Post() {
 	var postParams models.Theme
 	err := json.Unmarshal(this.Ctx.Input.RequestBody, &postParams)
 	if err != nil {
+		beego.Error("theme post parse err: ", err)
 		this.Data["json"] = map[string]int{"status": 0}
 		this.ServeJSON()
 		return
 	}
 	id, err := postParams.Add()
-	if err == nil || id <= 0 {
+	if err != nil || id <= 0 {
+		beego.Error("theme post add err: ", err)
 		this.Data["json"] = map[string]int{"status": 0}
 	} else {
 		this.Data["json"] = map[string]int64{

@@ -14,7 +14,7 @@ type Cate struct {
 }
 
 func (this *Cate) TableName() string {
-	return "theme"
+	return "cate"
 }
 
 func NewCate() *Cate {
