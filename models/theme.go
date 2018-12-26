@@ -20,6 +20,10 @@ type Theme struct {
 	Lastreplytime int64
 }
 
+var (
+	pageSize = 20
+)
+
 func (this *Theme) TableName() string {
 	return "theme"
 }
@@ -32,4 +36,10 @@ func (this *Theme) Add() (int64, error) {
 	this.Status = 1
 	this.Instime = time.Now().Unix()
 	return orm.NewOrm().Insert(this)
+}
+
+func (this *Theme) Get(page int) ([]*Theme, error) {
+	theme := []*Theme{}
+	_, err := orm.NewOrm().QueryTable(this.TableName()).Filter("status", 1).OrderBy("-sort").Limit(pageSize, page).All(&theme)
+	return theme, err
 }

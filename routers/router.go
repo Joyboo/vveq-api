@@ -15,34 +15,16 @@ import (
 
 func init() {
 	view := beego.NewNamespace("/api",
-		beego.NSNamespace("/user",
-			beego.NSInclude(
-				&controllers.UserController{},
-			),
-		),
-		beego.NSNamespace("/verify",
-			beego.NSInclude(
-				&controllers.VerifyController{},
-			),
-		),
-		beego.NSNamespace("/theme",
-			beego.NSInclude(
-				&controllers.ThemeController{},
-			),
-		),
+		beego.NSNamespace("/user", beego.NSInclude(&controllers.UserController{})),
+		beego.NSNamespace("/verify", beego.NSInclude(&controllers.VerifyController{})),
+		beego.NSNamespace("/theme", beego.NSInclude(&controllers.ThemeController{})),
+		beego.NSNamespace("/common", beego.NSInclude(&controllers.CommonController{})),
 	)
 
 	admin := beego.NewNamespace("/admin",
-		beego.NSNamespace("/cate",
-			beego.NSInclude(
-				&controllers.CateController{},
-			),
-		),
-		beego.NSNamespace("/tag",
-			beego.NSInclude(
-				&controllers.TagController{},
-			),
-		),
+		beego.NSNamespace("/cate", beego.NSInclude(&controllers.CateController{})),
+		beego.NSNamespace("/tag", beego.NSInclude(&controllers.TagController{})),
 	)
+
 	beego.AddNamespace(view, admin)
 }

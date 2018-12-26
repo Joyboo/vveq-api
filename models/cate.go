@@ -1,5 +1,7 @@
 package models
 
+import "github.com/astaxie/beego/orm"
+
 type Cate struct {
 	Id      int64
 	Pid     int
@@ -23,4 +25,11 @@ func NewCate() *Cate {
 
 func (this *Cate) Add() (int64, error) {
 	return 0, nil
+}
+
+// 获取全部分类
+func (this *Cate) GetAll() ([]*Cate, error) {
+	cate := []*Cate{}
+	_, err := orm.NewOrm().QueryTable(this.TableName()).Filter("status", 1).OrderBy("-sort").All(&cate)
+	return cate, err
 }
