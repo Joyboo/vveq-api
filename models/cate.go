@@ -1,13 +1,15 @@
 package models
 
-import "github.com/astaxie/beego/orm"
+import (
+	"github.com/astaxie/beego/orm"
+	"time"
+)
 
 type Cate struct {
 	Id      int64
 	Pid     int
 	Name    string
 	Sort    int
-	Route   string
 	Status  int
 	Insuid  int64
 	Instime int64
@@ -24,7 +26,9 @@ func NewCate() *Cate {
 }
 
 func (this *Cate) Add() (int64, error) {
-	return 0, nil
+	this.Status = 1
+	this.Instime = time.Now().Unix()
+	return orm.NewOrm().Insert(this)
 }
 
 // 获取全部分类

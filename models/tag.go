@@ -2,6 +2,7 @@ package models
 
 import (
 	"github.com/astaxie/beego/orm"
+	"time"
 )
 
 type Tag struct {
@@ -21,7 +22,9 @@ func NewTag() *Tag {
 }
 
 func (this *Tag) Add() (int64, error) {
-	return 0, nil
+	this.Status = 1
+	this.Instime = time.Now().Unix()
+	return orm.NewOrm().Insert(this)
 }
 
 // 获取全部标签

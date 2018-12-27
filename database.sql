@@ -60,7 +60,6 @@ CREATE TABLE IF NOT EXISTS `cate` (
   `pid` smallint(5) UNSIGNED NOT NULL DEFAULT 0 COMMENT '父级id',
   `name` varchar(20) NOT NULL DEFAULT '' COMMENT '分类名称',
   `sort` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '排序',
-  `route` varchar(30) NOT NULL DEFAULT '' COMMENT '前端路由',
   `status` tinyint(2) UNSIGNED NOT NULL DEFAULT 1 COMMENT '1：显示,0：隐藏',
   `insuid` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '添加用户id',
   `instime` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '添加时间',
