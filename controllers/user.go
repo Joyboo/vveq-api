@@ -170,8 +170,8 @@ func (this *UserController) Login() {
 func (this *UserController) UsernameIsExists() {
 	username := this.GetString(":username")
 	if username != "" {
-		num, err := models.NewUser().GetUserByName(username)
-		if err == nil && num <= 0 {
+		exist := models.NewUser().UsernameExist(username)
+		if !exist {
 			this.Data["json"] = Response{Status: 1}
 		} else {
 			this.Data["json"] = ErrResponse{Status: 0}

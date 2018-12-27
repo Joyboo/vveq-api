@@ -48,6 +48,12 @@ func init() {
 	if beego.AppConfig.String("runmode") == "dev" {
 		orm.Debug = true
 	}
+	// 分区数据表，不支持自动建表
+	/*err = orm.RunSyncdb("default", false, true)
+	if err != nil {
+		fmt.Println(err)
+	}
+	orm.RunCommand()*/
 }
 
 func Md5(str string) string {

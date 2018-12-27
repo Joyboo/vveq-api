@@ -9,7 +9,7 @@ type Dau struct {
 	Id      int64
 	Uid     int64
 	Ip      int64
-	Instime int64
+	Instime time.Time `orm:"column(instime);auto_now_add;type(datetime)"`
 }
 
 func NewDau() *Dau {
@@ -21,7 +21,6 @@ func (this *Dau) Query() orm.QuerySeter {
 }
 
 func (this *Dau) Add() (int64, error) {
-	this.Instime = time.Now().Unix()
 	// TODO 走redis队列
 	return orm.NewOrm().Insert(this)
 }

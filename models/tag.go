@@ -10,7 +10,7 @@ type Tag struct {
 	Name    string
 	Status  int
 	Insuid  int64
-	Instime int64
+	Instime time.Time `orm:"column(instime);auto_now_add;type(datetime)"`
 }
 
 func NewTag() *Tag {
@@ -23,7 +23,6 @@ func (this *Tag) Query() orm.QuerySeter {
 
 func (this *Tag) Add() (int64, error) {
 	this.Status = 1
-	this.Instime = time.Now().Unix()
 	return orm.NewOrm().Insert(this)
 }
 

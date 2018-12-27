@@ -6,18 +6,17 @@ import (
 )
 
 type Theme struct {
-	Id            int64
-	Cid           int
-	Title         string
-	Content       string
-	Uid           int64
-	Tagid         int
-	Sort          int
-	Click         int64
-	Like          int64
-	Status        int
-	Instime       int64
-	Lastreplytime int64
+	Id      int64
+	Cid     int
+	Title   string
+	Content string
+	Uid     int64
+	Tagid   int
+	Sort    int
+	Click   int64
+	Like    int64
+	Status  int
+	Instime time.Time `orm:"column(instime);auto_now_add;type(datetime)"`
 }
 
 var (
@@ -30,7 +29,6 @@ func NewTheme() *Theme {
 
 func (this *Theme) Add() (int64, error) {
 	this.Status = 1
-	this.Instime = time.Now().Unix()
 	return orm.NewOrm().Insert(this)
 }
 

@@ -16,8 +16,9 @@ type User struct {
 	Email         string
 	Tel           string
 	Avatar        string
-	Instime       int64
 	Status        int
+	Instime       time.Time `orm:"column(instime);auto_now_add;type(datetime)"`
+	Updtime       time.Time `orm:"column(updtime);auto_now;type(datetime)"`
 }
 
 func NewUser() *User {
@@ -32,8 +33,8 @@ func (this *User) Query() orm.QuerySeter {
 // @param username string
 // @return int46
 // @return error
-func (this *User) GetUserByName(username string) (int64, error) {
-	return this.Query().Filter("username", username).Count()
+func (this *User) UsernameExist(username string) bool {
+	return this.Query().Filter("username", username).Exist()
 }
 
 // 添加新用户
@@ -42,12 +43,11 @@ func (this *User) Add() (int64, error) {
 	if err != nil || !b {
 		return 0, err
 	}
-	num, err := this.GetUserByName(this.Username)
-	if num > 0 || err != nil {
+	exist := this.UsernameExist(this.Username)
+	if exist || err != nil {
 		return 0, err
 	}
 	this.Status = 1
-	this.Instime = time.Now().Unix()
 	this.Password = Md5(this.Password)
 	// TODO 走redis队列
 	return orm.NewOrm().Insert(this)

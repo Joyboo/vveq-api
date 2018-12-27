@@ -12,9 +12,7 @@ type Cate struct {
 	Sort    int
 	Status  int
 	Insuid  int64
-	Instime int64
-	Upduid  int64
-	Updtime int64
+	Instime time.Time `orm:"column(instime);auto_now_add;type(datetime)"`
 }
 
 func (this *Cate) Query() orm.QuerySeter {
@@ -27,7 +25,6 @@ func NewCate() *Cate {
 
 func (this *Cate) Add() (int64, error) {
 	this.Status = 1
-	this.Instime = time.Now().Unix()
 	return orm.NewOrm().Insert(this)
 }
 
