@@ -13,12 +13,12 @@ type Tag struct {
 	Instime int64
 }
 
-func (this *Tag) TableName() string {
-	return "tag"
-}
-
 func NewTag() *Tag {
 	return &Tag{}
+}
+
+func (this *Tag) Query() orm.QuerySeter {
+	return orm.NewOrm().QueryTable(new(Tag)).Filter("status", 1)
 }
 
 func (this *Tag) Add() (int64, error) {
@@ -30,6 +30,6 @@ func (this *Tag) Add() (int64, error) {
 // 获取全部标签
 func (this *Tag) GetAll() ([]*Tag, error) {
 	tag := []*Tag{}
-	_, err := orm.NewOrm().QueryTable(this.TableName()).Filter("status", 1).All(&tag)
+	_, err := this.Query().All(&tag)
 	return tag, err
 }

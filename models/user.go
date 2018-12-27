@@ -20,12 +20,12 @@ type User struct {
 	Status        int
 }
 
-func (this *User) TableName() string {
-	return "user"
-}
-
 func NewUser() *User {
 	return &User{}
+}
+
+func (this *User) Query() orm.QuerySeter {
+	return orm.NewOrm().QueryTable(new(User)).Filter("status", 1)
 }
 
 // 用户名是否存在
@@ -33,7 +33,7 @@ func NewUser() *User {
 // @return int46
 // @return error
 func (this *User) GetUserByName(username string) (int64, error) {
-	return orm.NewOrm().QueryTable(this.TableName()).Filter("username", username).Count()
+	return this.Query().Filter("username", username).Count()
 }
 
 // 添加新用户
@@ -71,13 +71,13 @@ func (this *User) VerifyUserInfo() (bool, error) {
 
 func (this *User) GetUserById(id int64) (User, error) {
 	var user User
-	err := orm.NewOrm().QueryTable(this.TableName()).Filter("id", id).One(&user)
+	err := this.Query().Filter("id", id).One(&user)
 	return user, err
 }
 
 func (this *User) Login() (User, error) {
 	var user User
-	err := orm.NewOrm().QueryTable(this.TableName()).Filter("username", this.Username).Filter("password", Md5(this.Password)).Filter("status", 1).One(&user)
+	err := this.Query().Filter("username", this.Username).Filter("password", Md5(this.Password)).One(&user)
 	return user, err
 }
 

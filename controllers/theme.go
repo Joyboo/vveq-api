@@ -22,19 +22,16 @@ func (this *ThemeController) Post() {
 	err := json.Unmarshal(this.Ctx.Input.RequestBody, &postParams)
 	if err != nil {
 		beego.Error("theme post parse err: ", err)
-		this.Data["json"] = map[string]int{"status": 0}
+		this.Data["json"] = ErrResponse{Status: 0}
 		this.ServeJSON()
 		return
 	}
 	id, err := postParams.Add()
 	if err != nil || id <= 0 {
 		beego.Error("theme post add err: ", err)
-		this.Data["json"] = map[string]int{"status": 0}
+		this.Data["json"] = ErrResponse{Status: 0}
 	} else {
-		this.Data["json"] = map[string]int64{
-			"status": 1,
-			"data":   id,
-		}
+		this.Data["json"] = Response{1, id}
 	}
 	this.ServeJSON()
 }

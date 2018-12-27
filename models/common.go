@@ -14,7 +14,7 @@ import (
 )
 
 type Model interface {
-	TableName() string
+	Query() orm.QuerySeter
 	Add() (int64, error)
 }
 

@@ -24,10 +24,6 @@ var (
 	pageSize = 20
 )
 
-func (this *Theme) TableName() string {
-	return "theme"
-}
-
 func NewTheme() *Theme {
 	return &Theme{}
 }
@@ -38,8 +34,12 @@ func (this *Theme) Add() (int64, error) {
 	return orm.NewOrm().Insert(this)
 }
 
+func (this *Theme) Query() orm.QuerySeter {
+	return orm.NewOrm().QueryTable(new(Theme)).Filter("status", 1)
+}
+
 func (this *Theme) Get(page int) ([]*Theme, error) {
 	theme := []*Theme{}
-	_, err := orm.NewOrm().QueryTable(this.TableName()).Filter("status", 1).OrderBy("-sort").Limit(pageSize, page).All(&theme)
+	_, err := this.Query().OrderBy("-sort").Limit(pageSize, page).All(&theme)
 	return theme, err
 }

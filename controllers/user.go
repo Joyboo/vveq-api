@@ -27,13 +27,13 @@ func (this *UserController) Post() {
 	var postParams postPar
 	err := json.Unmarshal(this.Ctx.Input.RequestBody, &postParams)
 	if err != nil {
-		this.Data["json"] = map[string]int{"status": 0}
+		this.Data["json"] = ErrResponse{Status: 0}
 		this.ServeJSON()
 		return
 	}
 	// 验证码校验
 	if verifyResult := postParams.Verify.Compare(); !verifyResult {
-		this.Data["json"] = map[string]int{"status": -1}
+		this.Data["json"] = ErrResponse{Status: -1}
 		this.ServeJSON()
 		return
 	}
@@ -41,11 +41,11 @@ func (this *UserController) Post() {
 	uid, err := postParams.From.Add()
 	if err != nil || uid <= 0 {
 		beego.Error("uid->", uid, ", 注册用户失败: ", err)
-		this.Data["json"] = map[string]int{"status": 0}
+		this.Data["json"] = ErrResponse{Status: 0}
 	} else {
-		this.Data["json"] = map[string]interface{}{
-			"status": 1,
-			"data": map[string]interface{}{
+		this.Data["json"] = Response{
+			Status: 1,
+			Data: map[string]interface{}{
 				"id":       uid,
 				"username": postParams.From.Username,
 				"nickname": postParams.From.Nickname,
@@ -81,15 +81,10 @@ func (this *UserController) Get() {
 	if uid > 0 {
 		user, err := models.NewUser().GetUserById(uid)
 		if err != nil {
-			this.Data["json"] = map[string]interface{}{
-				"status": 0,
-				"data":   err.Error(),
-			}
+			beego.Error("User Get err: ", err)
+			this.Data["json"] = ErrResponse{Status: 0}
 		} else {
-			this.Data["json"] = map[string]interface{}{
-				"status": 1,
-				"data":   user,
-			}
+			this.Data["json"] = Response{1, user}
 		}
 	}
 	this.ServeJSON()
@@ -147,20 +142,14 @@ func (this *UserController) Login() {
 	user, err := user.Login()
 	if err != nil {
 		beego.Error("登录出错了-->", err)
-		this.Data["json"] = map[string]int{"status": 0}
+		this.Data["json"] = ErrResponse{Status: 0}
 	} else {
 
-		go func() {
-			dau := &models.Dau{
-				Uid: user.Id,
-				Ip:  models.IpString2Int(this.Ctx.Request.RemoteAddr),
-			}
-			dau.Add()
-		}()
+		models.NewDau().Log(user.Id, this.Ctx.Request.RemoteAddr)
 
-		this.Data["json"] = map[string]interface{}{
-			"status": 1,
-			"data": map[string]interface{}{
+		this.Data["json"] = Response{
+			Status: 1,
+			Data: map[string]interface{}{
 				"id":       user.Id,
 				"username": user.Username,
 				"nickname": user.Nickname,
@@ -174,15 +163,6 @@ func (this *UserController) Login() {
 	this.ServeJSON()
 }
 
-// @Title logout
-// @Description Logs out current logged in user session
-// @Success 200 {string} logout success
-// @router /logout [get]
-/*func (u *UserController) Logout() {
-	u.Data["json"] = "logout success"
-	u.ServeJSON()
-}*/
-
 // @Title UsernameIsExists
 // @Description 用户名是否存在
 // @Success 200 {string} logout success
@@ -192,9 +172,9 @@ func (this *UserController) UsernameIsExists() {
 	if username != "" {
 		num, err := models.NewUser().GetUserByName(username)
 		if err == nil && num <= 0 {
-			this.Data["json"] = map[string]int{"status": 1}
+			this.Data["json"] = Response{Status: 1}
 		} else {
-			this.Data["json"] = map[string]int{"status": 0}
+			this.Data["json"] = ErrResponse{Status: 0}
 		}
 	}
 	this.ServeJSON()

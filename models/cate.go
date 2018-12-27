@@ -17,8 +17,8 @@ type Cate struct {
 	Updtime int64
 }
 
-func (this *Cate) TableName() string {
-	return "cate"
+func (this *Cate) Query() orm.QuerySeter {
+	return orm.NewOrm().QueryTable(new(Cate)).Filter("status", 1)
 }
 
 func NewCate() *Cate {
@@ -34,6 +34,6 @@ func (this *Cate) Add() (int64, error) {
 // 获取全部分类
 func (this *Cate) GetAll() ([]*Cate, error) {
 	cate := []*Cate{}
-	_, err := orm.NewOrm().QueryTable(this.TableName()).Filter("status", 1).OrderBy("-sort").All(&cate)
+	_, err := this.Query().OrderBy("-sort").All(&cate)
 	return cate, err
 }
