@@ -6,17 +6,17 @@ import (
 )
 
 type Theme struct {
-	Id      int64
-	Cid     int
-	Title   string
-	Content string
-	Uid     int64
-	Tagid   int
-	Sort    int
-	Click   int64
-	Like    int64
-	Status  int
-	Instime time.Time `orm:"column(instime);auto_now_add;type(datetime)"`
+	Id      int64     `json:"id"`
+	Cid     int       `json:"cid"`
+	Title   string    `json:"title"`
+	Content string    `json:"content"`
+	Uid     int64     `json:"uid"`
+	Tagid   int       `json:"tagid"`
+	Sort    int       `json:"sort"`
+	Click   int64     `json:"click"`
+	Like    int64     `json:"like"`
+	Status  int       `json:"status"`
+	Instime time.Time `orm:"column(instime);auto_now_add;type(datetime)" json:"instime"`
 }
 
 var (

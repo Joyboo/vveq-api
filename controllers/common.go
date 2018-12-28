@@ -1,8 +1,6 @@
 package controllers
 
 import (
-	"fmt"
-	"github.com/astaxie/beego"
 	"vveq-api/models"
 )
 
@@ -21,7 +19,7 @@ type IndexParams struct {
 // @Success 200 {int}
 // @Failure 403 body is empty
 // @router / [get]
-func (this *CommonController) Get() {
+/*func (this *CommonController) Get() {
 	// 获取标签
 	tag, err := models.NewTag().GetAll()
 	if err != nil {
@@ -47,3 +45,4 @@ func (this *CommonController) Get() {
 	}
 	this.ServeJSON()
 }
+*/

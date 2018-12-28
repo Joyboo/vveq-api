@@ -40,7 +40,7 @@ func (this *UserController) Post() {
 
 	uid, err := postParams.From.Add()
 	if err != nil || uid <= 0 {
-		beego.Error("uid->", uid, ", 注册用户失败: ", err)
+		beego.Error("uid->", uid, ", 注册用户失败: ", err, ", params: ", postParams.From)
 		this.Data["json"] = ErrResponse{Status: 0}
 	} else {
 		this.Data["json"] = Response{

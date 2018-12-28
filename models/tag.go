@@ -6,11 +6,11 @@ import (
 )
 
 type Tag struct {
-	Id      int64
-	Name    string
-	Status  int
-	Insuid  int64
-	Instime time.Time `orm:"column(instime);auto_now_add;type(datetime)"`
+	Id      int64     `json:"id"`
+	Name    string    `json:"name"`
+	Status  int       `json:"status"`
+	Insuid  int64     `json:"insuid"`
+	Instime time.Time `orm:"column(instime);auto_now_add;type(datetime)" json:"instime"`
 }
 
 func NewTag() *Tag {

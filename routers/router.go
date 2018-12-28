@@ -19,6 +19,8 @@ func init() {
 		beego.NSNamespace("/verify", beego.NSInclude(&controllers.VerifyController{})),
 		beego.NSNamespace("/theme", beego.NSInclude(&controllers.ThemeController{})),
 		beego.NSNamespace("/common", beego.NSInclude(&controllers.CommonController{})),
+		beego.NSNamespace("/cate", beego.NSInclude(&controllers.CateController{})),
+		beego.NSNamespace("/tag", beego.NSInclude(&controllers.CateController{})),
 	)
 
 	admin := beego.NewNamespace("/admin",

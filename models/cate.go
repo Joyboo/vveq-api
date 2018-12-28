@@ -6,13 +6,13 @@ import (
 )
 
 type Cate struct {
-	Id      int64
-	Pid     int
-	Name    string
-	Sort    int
-	Status  int
-	Insuid  int64
-	Instime time.Time `orm:"column(instime);auto_now_add;type(datetime)"`
+	Id      int64     `json:"id"`
+	Pid     int       `json:"pid"`
+	Name    string    `json:"name"`
+	Sort    int       `json:"sort"`
+	Status  int       `json:"status"`
+	Insuid  int64     `json:"insuid"`
+	Instime time.Time `orm:"column(instime);auto_now_add;type(datetime)" json:"instime"`
 }
 
 func (this *Cate) Query() orm.QuerySeter {

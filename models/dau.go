@@ -6,10 +6,10 @@ import (
 )
 
 type Dau struct {
-	Id      int64
-	Uid     int64
-	Ip      int64
-	Instime time.Time `orm:"column(instime);auto_now_add;type(datetime)"`
+	Id      int64     `json:"id"`
+	Uid     int64     `json:"uid"`
+	Ip      int64     `json:"ip"`
+	Instime time.Time `orm:"column(instime);auto_now_add;type(datetime)" json:"instime"`
 }
 
 func NewDau() *Dau {

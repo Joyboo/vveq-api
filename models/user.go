@@ -8,17 +8,17 @@ import (
 )
 
 type User struct {
-	Id            int64
-	Username      string `orm:"unique"`
-	Nickname      string
+	Id            int64  `json:"id"`
+	Username      string `orm:"unique" json:"username"`
+	Nickname      string `json:"nickname"`
 	Password      string
-	CheckPassword string `orm:"-"`
-	Email         string
-	Tel           string
-	Avatar        string
-	Status        int
-	Instime       time.Time `orm:"column(instime);auto_now_add;type(datetime)"`
-	Updtime       time.Time `orm:"column(updtime);auto_now;type(datetime)"`
+	CheckPassword string    `orm:"-"`
+	Email         string    `json:"email"`
+	Tel           string    `json:"tel"`
+	Avatar        string    `json:"avatar"`
+	Status        int       `json:"status"`
+	Instime       time.Time `orm:"column(instime);auto_now_add;type(datetime)" json:"instime"`
+	Updtime       time.Time `orm:"column(updtime);auto_now;type(datetime)" json:updatime`
 }
 
 func NewUser() *User {

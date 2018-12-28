@@ -43,6 +43,7 @@ func init() {
 		new(Cate),
 		new(Theme),
 		new(Tag),
+		new(Comment),
 	)
 
 	if beego.AppConfig.String("runmode") == "dev" {
