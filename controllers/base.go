@@ -17,3 +17,7 @@ type ErrResponse struct {
 	Status int         `json:"status"`
 	Msg    interface{} `json:"msg"`
 }
+
+type ResponseDataType map[string]interface{}
+
+const TimeFormart = "2006-01-02 15:04:05"

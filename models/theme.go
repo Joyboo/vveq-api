@@ -36,8 +36,14 @@ func (this *Theme) Query() orm.QuerySeter {
 	return orm.NewOrm().QueryTable(new(Theme)).Filter("status", 1)
 }
 
-func (this *Theme) Get(page int) ([]*Theme, error) {
+func (this *Theme) GetThemeById(id int64) (Theme, error) {
+	var theme Theme
+	err := this.Query().Filter("id", id).One(&theme)
+	return theme, err
+}
+
+func (this *Theme) Gets(page int) ([]*Theme, error) {
 	theme := []*Theme{}
-	_, err := this.Query().OrderBy("-sort").Limit(pageSize, page).All(&theme)
+	_, err := this.Query().OrderBy("-sort", "-instime").Limit(pageSize, page).All(&theme)
 	return theme, err
 }

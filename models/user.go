@@ -81,6 +81,19 @@ func (this *User) Login() (User, error) {
 	return user, err
 }
 
+// 用户信息
+// param uids []int64 包含uid的slice
+// return map[uid]User
+func (this *User) UsersByUserId(uids []int64) map[int64]User {
+	var user []User
+	this.Query().Filter("id__in", uids).All(&user)
+	avatar := make(map[int64]User)
+	for _, v := range user {
+		avatar[v.Id] = v
+	}
+	return avatar
+}
+
 /*
 func GetAllUsers() map[int]*User {
 	return [0]User{}

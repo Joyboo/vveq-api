@@ -25,7 +25,7 @@ func NewComment() *Comment {
 }
 
 func (this *Comment) Query() orm.QuerySeter {
-	return orm.NewOrm().QueryTable(new(Comment)).Filter("status", 1)
+	return orm.NewOrm().QueryTable(new(Comment))
 }
 
 // 获取主题的回复数
@@ -43,4 +43,12 @@ func (this *Comment) GetCommentNumByThemes(themes []*Theme) {
 		fmt.Printf("num=%d , err=%v\n", num, err)
 		fmt.Println(countnum)
 	}
+}
+
+// 获取一个主题所有回复
+func (this *Comment) GetCommentsByTid(tid int64) ([]Comment, error) {
+	var comments []Comment
+	// todo 评论分页
+	_, err := this.Query().Filter("tid", tid).OrderBy("-instime").All(&comments)
+	return comments, err
 }
