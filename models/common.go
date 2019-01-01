@@ -18,6 +18,8 @@ type Model interface {
 	Add() (int64, error)
 }
 
+const TimeFormart = "2006-01-02 15:04:05"
+
 func init() {
 	dbhost := beego.AppConfig.String("db.host")
 	dbport := beego.AppConfig.String("db.port")
@@ -44,6 +46,7 @@ func init() {
 		new(Theme),
 		new(Tag),
 		new(Comment),
+		new(Like),
 	)
 
 	if beego.AppConfig.String("runmode") == "dev" {

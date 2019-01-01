@@ -33,8 +33,12 @@ func (this *ThemeController) Get() {
 		this.ServeJSON()
 		return
 	}
+	this.Data["json"] = Response{
+		Status: 1,
+		Data:   theme.Content,
+	}
 
-	comments, err := models.NewComment().GetCommentsByTid(id)
+	/*comments, err := models.NewComment().GetCommentsByTid(id)
 	if err != nil {
 		beego.Error("theme get param3: id=", id)
 		this.Data["json"] = Response{Status: 0}
@@ -77,7 +81,7 @@ func (this *ThemeController) Get() {
 	this.Data["json"] = Response{
 		Status: 1,
 		Data:   data,
-	}
+	}*/
 	this.ServeJSON()
 }
 

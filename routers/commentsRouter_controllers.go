@@ -13,7 +13,6 @@ func init() {
 			Router:           `/`,
 			AllowHTTPMethods: []string{"get"},
 			MethodParams:     param.Make(),
-			Filters:          nil,
 			Params:           nil})
 
 	beego.GlobalControllerRouter["vveq-api/controllers:CateController"] = append(beego.GlobalControllerRouter["vveq-api/controllers:CateController"],
@@ -22,7 +21,14 @@ func init() {
 			Router:           `/`,
 			AllowHTTPMethods: []string{"post"},
 			MethodParams:     param.Make(),
-			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["vveq-api/controllers:LikeController"] = append(beego.GlobalControllerRouter["vveq-api/controllers:LikeController"],
+		beego.ControllerComments{
+			Method:           "Post",
+			Router:           `/`,
+			AllowHTTPMethods: []string{"post"},
+			MethodParams:     param.Make(),
 			Params:           nil})
 
 	beego.GlobalControllerRouter["vveq-api/controllers:TagController"] = append(beego.GlobalControllerRouter["vveq-api/controllers:TagController"],
@@ -31,7 +37,6 @@ func init() {
 			Router:           `/`,
 			AllowHTTPMethods: []string{"get"},
 			MethodParams:     param.Make(),
-			Filters:          nil,
 			Params:           nil})
 
 	beego.GlobalControllerRouter["vveq-api/controllers:TagController"] = append(beego.GlobalControllerRouter["vveq-api/controllers:TagController"],
@@ -40,7 +45,6 @@ func init() {
 			Router:           `/`,
 			AllowHTTPMethods: []string{"post"},
 			MethodParams:     param.Make(),
-			Filters:          nil,
 			Params:           nil})
 
 	beego.GlobalControllerRouter["vveq-api/controllers:ThemeController"] = append(beego.GlobalControllerRouter["vveq-api/controllers:ThemeController"],
@@ -49,7 +53,6 @@ func init() {
 			Router:           `/`,
 			AllowHTTPMethods: []string{"post"},
 			MethodParams:     param.Make(),
-			Filters:          nil,
 			Params:           nil})
 
 	beego.GlobalControllerRouter["vveq-api/controllers:ThemeController"] = append(beego.GlobalControllerRouter["vveq-api/controllers:ThemeController"],
@@ -58,7 +61,6 @@ func init() {
 			Router:           `/:id`,
 			AllowHTTPMethods: []string{"get"},
 			MethodParams:     param.Make(),
-			Filters:          nil,
 			Params:           nil})
 
 	beego.GlobalControllerRouter["vveq-api/controllers:ThemeController"] = append(beego.GlobalControllerRouter["vveq-api/controllers:ThemeController"],
@@ -67,7 +69,6 @@ func init() {
 			Router:           `/getIndexTheme/:page`,
 			AllowHTTPMethods: []string{"get"},
 			MethodParams:     param.Make(),
-			Filters:          nil,
 			Params:           nil})
 
 	beego.GlobalControllerRouter["vveq-api/controllers:UserController"] = append(beego.GlobalControllerRouter["vveq-api/controllers:UserController"],
@@ -76,7 +77,6 @@ func init() {
 			Router:           `/`,
 			AllowHTTPMethods: []string{"post"},
 			MethodParams:     param.Make(),
-			Filters:          nil,
 			Params:           nil})
 
 	beego.GlobalControllerRouter["vveq-api/controllers:UserController"] = append(beego.GlobalControllerRouter["vveq-api/controllers:UserController"],
@@ -85,7 +85,6 @@ func init() {
 			Router:           `/:uid`,
 			AllowHTTPMethods: []string{"get"},
 			MethodParams:     param.Make(),
-			Filters:          nil,
 			Params:           nil})
 
 	beego.GlobalControllerRouter["vveq-api/controllers:UserController"] = append(beego.GlobalControllerRouter["vveq-api/controllers:UserController"],
@@ -94,7 +93,6 @@ func init() {
 			Router:           `/login`,
 			AllowHTTPMethods: []string{"post"},
 			MethodParams:     param.Make(),
-			Filters:          nil,
 			Params:           nil})
 
 	beego.GlobalControllerRouter["vveq-api/controllers:UserController"] = append(beego.GlobalControllerRouter["vveq-api/controllers:UserController"],
@@ -103,7 +101,6 @@ func init() {
 			Router:           `/usernameIsExists/:username`,
 			AllowHTTPMethods: []string{"get"},
 			MethodParams:     param.Make(),
-			Filters:          nil,
 			Params:           nil})
 
 	beego.GlobalControllerRouter["vveq-api/controllers:VerifyController"] = append(beego.GlobalControllerRouter["vveq-api/controllers:VerifyController"],
@@ -112,7 +109,6 @@ func init() {
 			Router:           `/`,
 			AllowHTTPMethods: []string{"get"},
 			MethodParams:     param.Make(),
-			Filters:          nil,
 			Params:           nil})
 
 	beego.GlobalControllerRouter["vveq-api/controllers:VerifyController"] = append(beego.GlobalControllerRouter["vveq-api/controllers:VerifyController"],
@@ -121,7 +117,6 @@ func init() {
 			Router:           `/`,
 			AllowHTTPMethods: []string{"post"},
 			MethodParams:     param.Make(),
-			Filters:          nil,
 			Params:           nil})
 
 }

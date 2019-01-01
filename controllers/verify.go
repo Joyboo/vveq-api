@@ -14,9 +14,10 @@ type VerifyController struct {
 
 // @Title GetCaptcha
 // @Description 获取验证码
-// @Param	postParameters models.ConfigVerifyBody		"models.ConfigVerifyBody"
-// @Success 200 {object} models.ConfigVerifyBody
-// @Failure 403 param is empty
+// @Param	Id    			models.ConfigVerifyBody.Id		        "models.ConfigVerifyBody"
+// @Param	CaptchaType     models.ConfigVerifyBody.CaptchaType		"models.ConfigVerifyBody"
+// @Param	VerifyValue     models.ConfigVerifyBody.VerifyValue		"models.ConfigVerifyBody"
+// @Success 200 {object}    models.ConfigVerifyBody
 // @router / [get]
 func (this *VerifyController) Get() {
 	//接收客户端发送来的请求参数
@@ -50,7 +51,6 @@ func (this *VerifyController) Get() {
 // @Description 验证码校验
 // @Param	postParameters models.ConfigVerifyBody		"models.ConfigVerifyBody"
 // @Success 200 {object} models.ConfigVerifyBody
-// @Failure 403 param is empty
 // @router / [post]
 func (this *VerifyController) Post() {
 	//接收客户端发送来的请求参数

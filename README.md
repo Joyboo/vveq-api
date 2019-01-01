@@ -9,10 +9,14 @@
 
 #### Verify
 
-* `POST` /api/verify/getCaptcha 获取验证码
-* `POST` /api/verify/verifyCaptcha 验证码校验
+* `GET` /api/verify 获取验证码
+* `POST` /api/verify 验证码校验
+
+#### Like
 
 ### User
+
+* `POST` /api/like 点赞/取消点赞
 
 #### `GET` /api/user/usernameIsExists/:username  查询用户名是否存在
 
@@ -110,6 +114,22 @@ request
 CaptchaType|String|是|audio：音频，character：运算表达式，为空表示数字
 Id|String|是|系统生成的验证Id
 VerifyValue|String|是|用户输入的验证码
+
+response
+
+参数名|类型|是否必传|说明
+:--|:--:|:--:|:--:
+status|Int|是|1：成功，0：失败
+
+#### `POST` /api/like 点赞/取消点赞
+
+request
+
+参数名|类型|是否必传|说明
+:--|:--:|:--:|:--:
+type|int|是|点赞对象，0-主题 1-回复
+uid|int|是|用户id
+pid|int|是|对象id
 
 response
 
