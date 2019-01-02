@@ -14,9 +14,9 @@
 
 #### Like
 
-### User
-
 * `POST` /api/like 点赞/取消点赞
+
+### User
 
 #### `GET` /api/user/usernameIsExists/:username  查询用户名是否存在
 
@@ -120,6 +120,9 @@ response
 参数名|类型|是否必传|说明
 :--|:--:|:--:|:--:
 status|Int|是|1：成功，0：失败
+
+
+### Like
 
 #### `POST` /api/like 点赞/取消点赞
 

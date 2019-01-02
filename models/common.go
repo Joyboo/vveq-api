@@ -40,13 +40,13 @@ func init() {
 		beego.Error("注册默认数据库失败: ", err)
 	}
 	orm.RegisterModel(
-		new(User),
-		new(Dau),
-		new(Cate),
-		new(Theme),
-		new(Tag),
-		new(Comment),
-		new(Like),
+		NewUser(),
+		NewDau(),
+		NewCate(),
+		NewTheme(),
+		NewTag(),
+		NewComment(),
+		NewLike(),
 	)
 
 	if beego.AppConfig.String("runmode") == "dev" {

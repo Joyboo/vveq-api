@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/astaxie/beego"
 	"vveq-api/models"
 )
@@ -19,10 +18,9 @@ type ThemeController struct {
 // @router /:id [get]
 func (this *ThemeController) Get() {
 	id, err := this.GetInt64(":id", 0)
-	fmt.Printf("param id=%d \n", id)
 	if err != nil || id <= 0 {
 		beego.Error("theme get param1: id=", id, ", err=", err)
-		this.Data["json"] = Response{Status: 0}
+		this.Data["json"] = ErrResponse{Status: 0, Msg: "param err"}
 		this.ServeJSON()
 		return
 	}
@@ -35,57 +33,12 @@ func (this *ThemeController) Get() {
 	}
 	this.Data["json"] = Response{
 		Status: 1,
-		Data:   theme.Content,
+		Data:   theme,
 	}
-
-	/*comments, err := models.NewComment().GetCommentsByTid(id)
-	if err != nil {
-		beego.Error("theme get param3: id=", id)
-		this.Data["json"] = Response{Status: 0}
-		this.ServeJSON()
-		return
-	}
-
-	// 获取评论用户信息
-	var uids []int64
-	uids = append(uids, theme.Uid)
-	for _, v := range comments {
-		uids = append(uids, v.Uid)
-	}
-	users := models.NewUser().UsersByUserId(uids)
-
-	var ud []map[int64]interface{}
-	for _, v := range users {
-		one := make(map[int64]interface{})
-		one[v.Id] = map[string]interface{}{
-			"id":       v.Id,
-			"username": v.Username,
-			"nickname": v.Nickname,
-			"avatar":   v.Avatar,
-		}
-		ud = append(ud, one)
-	}
-
-	var data ResponseDataType
-	data["id"] = theme.Id
-	data["cid"] = theme.Cid
-	data["title"] = theme.Title
-	data["content"] = theme.Content
-	data["uid"] = theme.Uid
-	data["tagid"] = theme.Tagid
-	data["click"] = theme.Click
-	data["like"] = theme.Like
-	data["instime"] = theme.Instime.Format(TimeFormart)
-	data["comments"] = comments
-	data["users"] = ud
-	this.Data["json"] = Response{
-		Status: 1,
-		Data:   data,
-	}*/
 	this.ServeJSON()
 }
 
-// @Title 获取主题(主页)
+// @Title 获取主题列表(主页)
 // @Description get Tag
 // @Param	page	formData 	int	true		"当前第几页"
 // @Success 200 {int} model.Theme
@@ -160,3 +113,22 @@ func (this *ThemeController) Post() {
 	}
 	this.ServeJSON()
 }
+
+// @Title 获取主题(含评论，用户信息)
+// @Description get Tag
+// @Param	id	formData 	int	true		"models.Theme.Id"
+// @Success 200 {int} model.Theme
+// @router /themeAndComment/:id [get]
+/*func (this *ThemeController) ThemeAndComment() {
+	id, err := this.GetInt64(":id", 0)
+	if err != nil || id <= 0 {
+		beego.Error("ThemeAndComment param err : id=", id, ", err=", err)
+		this.Data["json"] = ErrResponse{Status: 0, Msg: "param err"}
+		this.ServeJSON()
+		return
+	}
+	// 获取theme
+	theme, _ := models.NewTheme().GetThemeById(id)
+	// 获取评论
+	models.NewComment().GetCommentNumByThemes()
+}*/
