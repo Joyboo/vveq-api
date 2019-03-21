@@ -28,8 +28,8 @@ CREATE TABLE IF NOT EXISTS `user` (
   `email` varchar(50) NOT NULL DEFAULT '' COMMENT 'email地址',
   `avatar` varchar(255) NOT NULL DEFAULT '' COMMENT '头像',
   `status` tinyint(2) UNSIGNED NOT NULL DEFAULT 1 COMMENT '状态，1-正常，2封禁',
-  `instime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '注册时间',
-  `updtime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '修改时间',
+  `instime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '注册时间',
+  `updtime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表';
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `dau` (
   `id` int UNSIGNED AUTO_INCREMENT NOT NULL,
   `uid` int UNSIGNED NOT NULL COMMENT '用户id',
   `ip` bigint(20) UNSIGNED NOT NULL DEFAULT 0 COMMENT '登录ip',
-  `instime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '登录时间',
+  `instime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '登录时间',
   PRIMARY KEY (`id`,`instime`),
   KEY `uid` (`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户登录表'
@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `cate` (
   `sort` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '排序',
   `status` tinyint(2) UNSIGNED NOT NULL DEFAULT 1 COMMENT '1：显示,0：隐藏',
   `insuid` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '添加用户id',
-  `instime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '添加时间',
+  `instime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '添加时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='分类表';
 
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `tag` (
   `name` varchar(20) NOT NULL DEFAULT '' COMMENT '标签名称',
   `status` tinyint(2) UNSIGNED NOT NULL DEFAULT 1 COMMENT '1：正常,0：禁用',
   `insuid` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '添加用户id',
-  `instime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '添加时间',
+  `instime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '添加时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='标签';
 
@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS `theme` (
   `tagid` smallint(5) UNSIGNED NOT NULL DEFAULT 0 COMMENT '标签id',
   `sort` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '排序',
   `status` tinyint(2) UNSIGNED NOT NULL DEFAULT 1 COMMENT '1：正常,0：删除',
-  `instime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '添加时间',
+  `instime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '添加时间',
   PRIMARY KEY (`id`,`instime`),
   KEY `cid` (`cid`),
   KEY `uid` (`uid`)
@@ -140,7 +140,7 @@ CREATE TABLE IF NOT EXISTS `comment` (
   `uid` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户id',
   `content` text NOT NULL COMMENT '内容',
   `like` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '点赞',
-  `instime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '回复时间',
+  `instime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '回复时间',
   PRIMARY KEY (`id`,`instime`),
   KEY `tid` (`tid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='回复'
@@ -193,7 +193,7 @@ CREATE TABLE IF NOT EXISTS `like` (
   `uid` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户id',
   `pid` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '对象id',
   `status` tinyint(2) UNSIGNED NOT NULL DEFAULT 1 COMMENT '1：正常,0：禁用',
-  `instime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '添加时间',
+  `instime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '添加时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `type_uid_pid`(`type`, `uid`, `pid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='点赞';

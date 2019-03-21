@@ -28,7 +28,7 @@ func (this *Dau) Add() (int64, error) {
 // 记录
 func (this *Dau) Log(uid int64, ip string) {
 	go func() {
-		this.Id = uid
+		this.Uid = uid
 		this.Ip = IpString2Int(ip)
 		this.Add()
 	}()
